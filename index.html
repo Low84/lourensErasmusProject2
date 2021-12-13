@@ -60,6 +60,9 @@
                   class="far fa-plus-square"></i> <span class="buttonText">Add New Employee</span></a>
             </div>
           </div>
+          <div id="searchBarDiv">
+            <input id="searchValue" type="text" placeholder="Search..."><button type="submit" id="searchBtn"><i class="fas fa-search"></i></button>
+          </div>
           <div class=" row">
             <table class="table table-striped test">
               <thead>
@@ -212,23 +215,29 @@
           <div class="modal-body">
             <div class="form-group">
               <label>First Name</label>
-              <input type="text" class="form-control" required>
+              <input id="firstNameEdit" type="text" class="form-control" required>
             </div>
             <div class="form-group">
               <label>Last Name</label>
-              <input type="text" class="form-control" required>
+              <input id="lastNameEdit" type="text" class="form-control" required>
             </div>
             <div class="form-group">
               <label>Job Title</label>
-              <input type="text" class="form-control" required>
+              <input id="jobEdit" type="text" class="form-control" required>
             </div>
             <div class="form-group">
               <label>Email</label>
-              <input type="email" class="form-control" required>
+              <input id="emailEdit" type="email" class="form-control" required>
             </div>
             <div class="form-group">
-              <label>Department</label>
-              <input type="text" class="form-control" required></input>
+              <label for="department">Location</label>
+              <select id="locationEdit" class="form-control" name="locationID">
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="department">Department</label>
+              <select id="departmentEdit" class="form-control" name="departmentID">
+              </select>
             </div>
           </div>
           <div class="modal-footer">
