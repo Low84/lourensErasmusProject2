@@ -42,53 +42,56 @@ $(document).ready(function () {
               console.log(result);
               console.log(result.data.personnel[0]['firstName']);
               console.log(result.data.personnel[0]['departmentID']);
+              $('#firstNameEdit').attr("value", result.data.personnel[0]['firstName']);
+              $('#lastNameEdit').attr("value", result.data.personnel[0]['lastName']);
+              $('#jobEdit').attr("value", result.data.personnel[0]['jobTitle']);
+              $('#emailEdit').attr("value", result.data.personnel[0]['email']);
 
-              console.log(result.data.department["result.data.personnel[0]['departmentID']"])
-              editModalData = '<div id="editEmployeeModal" class="modal fade">\
-                                <div class="modal-dialog">\
-                                  <div class="modal-content">\
-                                    <form>\
-                                      <div class="modal-header">\
-                                        <h4 class="modal-title">Edit Employee</h4>\
-                                        <a type="button" class="close" data-bs-dismiss="modal" aria-hidden="true"><i\
-                                            class="far fa-window-close fa-2x"></i></a>\
-                                      </div>\
-                                      <div class="modal-body">\
-                                        <div class="form-group">\
-                                          <label>First Name</label>\
-                                          <input id="firstNameEdit" type="text" class="form-control" value="' + result.data.personnel[0]['firstName'] + '" required>\
-                                        </div>\
-                                        <div class="form-group">\
-                                          <label>Last Name</label>\
-                                          <input id="lastNameEdit" type="text" class="form-control" value="' + result.data.personnel[0]['lastName'] + '" required>\
-                                        </div>\
-                                        <div class="form-group">\
-                                          <label>Job Title</label>\
-                                          <input id="jobEdit" type="text" class="form-control" value="' + result.data.personnel[0]['jobTitle'] + '" required>\
-                                        </div>\
-                                        <div class="form-group">\
-                                          <label>Email</label>\
-                                          <input id="emailEdit" type="email" class="form-control" value="' + result.data.personnel[0]['email'] + '" required>\
-                                        </div>\
-                                        <div class="form-group">\
-                                          <label for="location">Location</label>\
-                                          <select id="locationEdit" class="form-control" name="locationID">\
-                                          </select>\
-                                        </div>\
-                                        <div class="form-group">\
-                                          <label for="department">Department</label>\
-                                          <select id="departmentEdit" class="form-control" name="departmentID">\
-                                          </select>\
-                                        </div>\
-                                      </div>\
-                                      <div class="modal-footer">\
-                                        <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">\
-                                        <input type="submit" class="btn btn-info" value="Save">\
-                                      </div>\
-                                    </form>\
-                                  </div>\
-                                </div>\
-                              </div>';
+              // editModalData = '<div id="editEmployeeModal" class="modal fade">\
+              //                   <div class="modal-dialog">\
+              //                     <div class="modal-content">\
+              //                       <form>\
+              //                         <div class="modal-header">\
+              //                           <h4 class="modal-title">Edit Employee</h4>\
+              //                           <a type="button" class="close" data-bs-dismiss="modal" aria-hidden="true"><i\
+              //                               class="far fa-window-close fa-2x"></i></a>\
+              //                         </div>\
+              //                         <div class="modal-body">\
+              //                           <div class="form-group">\
+              //                             <label>First Name</label>\
+              //                             <input id="firstNameEdit" type="text" class="form-control" value="' + result.data.personnel[0]['firstName'] + '" required>\
+              //                           </div>\
+              //                           <div class="form-group">\
+              //                             <label>Last Name</label>\
+              //                             <input id="lastNameEdit" type="text" class="form-control" value="' + result.data.personnel[0]['lastName'] + '" required>\
+              //                           </div>\
+              //                           <div class="form-group">\
+              //                             <label>Job Title</label>\
+              //                             <input id="jobEdit" type="text" class="form-control" value="' + result.data.personnel[0]['jobTitle'] + '" required>\
+              //                           </div>\
+              //                           <div class="form-group">\
+              //                             <label>Email</label>\
+              //                             <input id="emailEdit" type="email" class="form-control" value="' + result.data.personnel[0]['email'] + '" required>\
+              //                           </div>\
+              //                           <div class="form-group">\
+              //                             <label for="location">Location</label>\
+              //                             <select id="locationEdit" class="form-control" name="locationID">\
+              //                             </select>\
+              //                           </div>\
+              //                           <div class="form-group">\
+              //                             <label for="department">Department</label>\
+              //                             <select id="departmentEdit" class="form-control" name="departmentID">\
+              //                             </select>\
+              //                           </div>\
+              //                         </div>\
+              //                         <div class="modal-footer">\
+              //                           <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">\
+              //                           <input type="submit" class="btn btn-info" value="Save">\
+              //                         </div>\
+              //                       </form>\
+              //                     </div>\
+              //                   </div>\
+              //                 </div>';
               // $.each(result.data, function (index, value) {
                 // console.log(value.id)
                 // $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
