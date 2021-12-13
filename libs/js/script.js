@@ -12,9 +12,9 @@ $(document).ready(function () {
     url: "libs/php/getAll.php",
     type: 'GET',
     success: function (result) {
-      // console.log(result)
+      console.log(result)
       $.each(result.data, function (index, value) {
-        data += "<tr like data-personnel-id='" + value.id + "'><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
+        data += "<tr like data-personnel-id='" + value.id + "'><td data-title='id'>" + value.id + "</td><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
         // console.log(value.location);
         data += "\
                   <td><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'  data-bs-target='editEmployeeModal'><i class='far fa-edit'\
@@ -71,7 +71,7 @@ $(document).ready(function () {
                         // console.log(value.id)
                         $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
                         console.log(locationNameId);
-
+                      })
                         $.ajax({
                           url: "libs/php/getLocationByID.php",
                           type: 'GET',
@@ -98,7 +98,7 @@ $(document).ready(function () {
                           error: function (jqXHR) {
                             console.log(jqXHR);
                           }
-                        })
+                        // })
                       })
                       $('#departmentEdit').append($("<option selected/>").val(departmentID).text(departmentName));
 
@@ -191,14 +191,6 @@ $(document).ready(function () {
       })
     },
   })
-
-  
-
-
-
-
-
-
 })
 
 function getId(id) {
