@@ -11,8 +11,9 @@ $(document).ready(function () {
     url: "libs/php/getAll.php",
     type: 'GET',
     success: function (result) {
+      // console.log(result)
       $.each(result.data, function (index, value) {
-        data += "<tr><td>" + value.firstName + "</td><td>" + value.lastName + "</td><td>" + value.jobTitle + "</td><td>" + value.email + "</td><td>" + value.department + "</td>";
+        data += "<tr><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
         // console.log(value.location);
      
         // data += '<tr><td class="hiddenColumn">' + value.id + "</td><td>" + value.firstName + "</td><td>" + value.lastName + "</td><td>" + value.jobTitle + "</td><td>" + value.email + "</td><td>" + value.department + "</td>";
@@ -35,8 +36,8 @@ $(document).ready(function () {
     success: function (result) {
       // console.log(result);
       $.each(result.data, function (index, value) {
-        // console.log(value.location);
-        locData += '<tr><td>' + value.name + "</td><td>" + "NoD" + "</td><td>" + "NoP" + "</td><td>";
+        // console.log(value.name);
+        locData += '<tr><td data-title="Location">' + value.name + "</td><td>" + "NoD" + "</td><td>" + "NoP" + "</td>";
         locData += "\
                   <td><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
@@ -55,12 +56,12 @@ $(document).ready(function () {
     url: "libs/php/getAllDepartments.php",
     type: 'GET',
     success: function (result) {
-      // console.log(result);
+      console.log(result);
       $.each(result.data, function (index, value) {
         // console.log(value.name);
-        deptData += '<tr><td>' + value.name + "</td><td>" + "NoL" + "</td><td>" + "NoP" + "</td><td>";
+        deptData += '<tr><td data-title="Department">' + value.name + "</td><td data-title='Depart. Location'>" + value.location + "</td><td data-title='No Of Depts'>" + value.count + "</td>";
         deptData += "\
-                  <td><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
+                  <td class='col-sm'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
