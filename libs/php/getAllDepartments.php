@@ -33,8 +33,13 @@
 	}	
 
 	// SQL does not accept parameters and so is not prepared
+  $query = 'SELECT department.name, COUNT(*) as count, location.name as location
+  FROM personnel 
+  INNER JOIN department ON personnel.departmentID=department.id
+  INNER JOIN location ON department.locationID=location.id
+  GROUP BY departmentID';
 
-	$query = 'SELECT id, name, locationID FROM department';
+	// $query = 'SELECT id, name, locationID FROM department';
 
 	$result = $conn->query($query);
 	
