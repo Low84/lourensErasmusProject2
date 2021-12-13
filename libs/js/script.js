@@ -18,12 +18,65 @@ $(document).ready(function () {
      
         // data += '<tr><td class="hiddenColumn">' + value.id + "</td><td>" + value.firstName + "</td><td>" + value.lastName + "</td><td>" + value.jobTitle + "</td><td>" + value.email + "</td><td>" + value.department + "</td>";
         data += "\
-                  <td><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
+                  <td><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'  data-bs-target='editEmployeeModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' onclick='getId(" + value.id + ")' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
+
+                  $('a[data-bs-target="editEmployeeModal"]').click(function() {
+                    console.log('aaaa');
+                    // Edit new employee modal -- department field populated
+                      // $.ajax({
+                      //   url: "libs/php/getPersonnelByID.php",
+                      //   type: 'GET',
+                      //   data: {
+                      //     id: value.id
+                      //   }
+                      //   success: function (result) {
+                      //     console.log(result);
+                      //     // $.each(result.data, function (index, value) {
+                      //       // console.log(value.id)
+                      //       // $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
+                      //     // })
+                      //   },
+                      //   error: function (jqXHR) {
+                      //     console.log(jqXHR);
+                      //   }
+                      // })
+                      // $.ajax({
+                      //   url: "libs/php/getAllDepartments.php",
+                      //   type: 'GET',
+                      //   success: function (result) {
+                      //     $.each(result.data, function (index, value) {
+                      //       // console.log(value.id)
+                      //       $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
+                      //     })
+                      //   },
+                      //   error: function (jqXHR) {
+                      //     console.log(jqXHR);
+                      //   }
+                      // })
+                      // // Edit new employee modal -- location field populated
+                      // $.ajax({
+                      //   url: "libs/php/getAllLocations.php",
+                      //   type: 'GET',
+                      //   success: function (result) {
+                      //     $.each(result.data, function (index, value) {
+                      //       // console.log(value.id)
+                      //       $('#locationEdit').append($("<option />").val(value.id).text(value.name));
+                      //     })
+                      //   },
+                      //   error: function (jqXHR) {
+                      //     console.log(jqXHR);
+                      //   }
+                      // })
+                    })
       })
+
+      
       $('#user_data').html(data);
+      
+
     },
     error: function (jqXHR) {
       console.log(jqXHR);
@@ -97,53 +150,7 @@ $(document).ready(function () {
     },
   })
 
-  $('editEmployeeModal').click(function() {
-    // Edit new employee modal -- department field populated
-    $.ajax({
-      url: "libs/php/getPersonnelByID.php",
-      type: 'GET',
-      // data: {
-      //   id: id
-      // }
-      success: function (result) {
-        console.log(result);
-        // $.each(result.data, function (index, value) {
-          // console.log(value.id)
-          // $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
-        // })
-      },
-      error: function (jqXHR) {
-        console.log(jqXHR);
-      }
-    })
-    $.ajax({
-      url: "libs/php/getAllDepartments.php",
-      type: 'GET',
-      success: function (result) {
-        $.each(result.data, function (index, value) {
-          // console.log(value.id)
-          $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
-        })
-      },
-      error: function (jqXHR) {
-        console.log(jqXHR);
-      }
-    })
-    // Edit new employee modal -- location field populated
-    $.ajax({
-      url: "libs/php/getAllLocations.php",
-      type: 'GET',
-      success: function (result) {
-        $.each(result.data, function (index, value) {
-          // console.log(value.id)
-          $('#locationEdit').append($("<option />").val(value.id).text(value.name));
-        })
-      },
-      error: function (jqXHR) {
-        console.log(jqXHR);
-      }
-    })
-  }) 
+  
 
 
 
