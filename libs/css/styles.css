@@ -1,6 +1,4 @@
-/* html {
-  font-family: 'Nanum Myeongjo', serif;
-} */
+
 
 body {
   color: #566787;
@@ -8,14 +6,6 @@ body {
   font-family: 'Rokkitt', serif;
   font-size: 16px;
 }
-
-/* .hiddenColumn {
-    visibility: hidden
-} */
-
-/* .locCell {
-
-} */
 
 .nav-tabs {
   font-size: 1.3rem;
@@ -78,9 +68,9 @@ body {
     float: right;
 }
 
-/* #directoryContainer {
-    padding-top: 3%;
-} */
+.justifyTable {
+  align-items: flex-start;
+}
 
 th {
   font-size: 1rem;
@@ -208,62 +198,56 @@ table.table .avatar {
     font-weight: normal;
 }
 
-
-
-
-
-
-
-
-
-/* Custom checkbox */
-/* .custom-checkbox {
-    position: relative;
+@media only screen and (max-width: 800px) {
+	
+	/* Force table to not be like tables anymore */
+	 table, 
+	 thead, 
+   tbody, 
+	 th, 
+	 td, 
+	 tr { 
+		display: block; 
+	}
+ 
+	/* Hide table headers (but not display: none;, for accessibility) */
+   thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+ 
+	 tr { 
+     margin: 0 0 1rem 0;
+     border: 1px solid #ccc; 
+    }
+ 
+	 td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+		white-space: normal;
+		text-align: right;
+	}
+ 
+	 td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 27%;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+		text-align:left;
+		font-weight: bold;
+	}
+ 
+	/* Label the data */
+	
+  td:before { 
+    content: attr(data-title); 
+  }
 }
-.custom-checkbox input[type="checkbox"] {    
-    opacity: 0;
-    position: absolute;
-    margin: 5px 0 0 3px;
-    z-index: 9;
-}
-.custom-checkbox label:before{
-    width: 18px;
-    height: 18px;
-}
-.custom-checkbox label:before {
-    content: '';
-    margin-right: 10px;
-    display: inline-block;
-    vertical-align: text-top;
-    background: white;
-    border: 1px solid #bbb;
-    border-radius: 2px;
-    box-sizing: border-box;
-    z-index: 2;
-}
-.custom-checkbox input[type="checkbox"]:checked + label:after {
-    content: '';
-    position: absolute;
-    left: 6px;
-    top: 3px;
-    width: 6px;
-    height: 11px;
-    border: solid #000;
-    border-width: 0 3px 3px 0;
-    transform: inherit;
-    z-index: 3;
-    transform: rotateZ(45deg);
-}
-.custom-checkbox input[type="checkbox"]:checked + label:before {
-    border-color: #03A9F4;
-    background: #03A9F4;
-}
-.custom-checkbox input[type="checkbox"]:checked + label:after {
-    border-color: #fff;
-}
-.custom-checkbox input[type="checkbox"]:disabled + label:before {
-    color: #b8b8b8;
-    cursor: auto;
-    box-shadow: none;
-    background: #ddd;
-} */
