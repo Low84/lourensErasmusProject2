@@ -5,7 +5,8 @@ $(document).ready(function () {
   let data;
   let locData;
   let deptData;
-  let searchValue;
+  let editId;
+  let editModalData;
 
   $.ajax({
     url: "libs/php/getAll.php",
@@ -13,69 +14,118 @@ $(document).ready(function () {
     success: function (result) {
       // console.log(result)
       $.each(result.data, function (index, value) {
-        data += "<tr><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
+        data += "<tr like data-personnel-id='" + value.id + "'><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
         // console.log(value.location);
-     
-        // data += '<tr><td class="hiddenColumn">' + value.id + "</td><td>" + value.firstName + "</td><td>" + value.lastName + "</td><td>" + value.jobTitle + "</td><td>" + value.email + "</td><td>" + value.department + "</td>";
         data += "\
                   <td><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'  data-bs-target='editEmployeeModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' onclick='getId(" + value.id + ")' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
 
-                  $('a[data-bs-target="editEmployeeModal"]').click(function() {
-                    console.log('aaaa');
-                    // Edit new employee modal -- department field populated
-                      // $.ajax({
-                      //   url: "libs/php/getPersonnelByID.php",
-                      //   type: 'GET',
-                      //   data: {
-                      //     id: value.id
-                      //   }
-                      //   success: function (result) {
-                      //     console.log(result);
-                      //     // $.each(result.data, function (index, value) {
-                      //       // console.log(value.id)
-                      //       // $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
-                      //     // })
-                      //   },
-                      //   error: function (jqXHR) {
-                      //     console.log(jqXHR);
-                      //   }
-                      // })
-                      // $.ajax({
-                      //   url: "libs/php/getAllDepartments.php",
-                      //   type: 'GET',
-                      //   success: function (result) {
-                      //     $.each(result.data, function (index, value) {
-                      //       // console.log(value.id)
-                      //       $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
-                      //     })
-                      //   },
-                      //   error: function (jqXHR) {
-                      //     console.log(jqXHR);
-                      //   }
-                      // })
-                      // // Edit new employee modal -- location field populated
-                      // $.ajax({
-                      //   url: "libs/php/getAllLocations.php",
-                      //   type: 'GET',
-                      //   success: function (result) {
-                      //     $.each(result.data, function (index, value) {
-                      //       // console.log(value.id)
-                      //       $('#locationEdit').append($("<option />").val(value.id).text(value.name));
-                      //     })
-                      //   },
-                      //   error: function (jqXHR) {
-                      //     console.log(jqXHR);
-                      //   }
-                      // })
-                    })
+                  
       })
 
       
       $('#user_data').html(data);
-      
+      $('a[data-bs-target="editEmployeeModal"]').click(function() {
+        editId = $(this).closest('tr').data('personnel-id');
+        console.log(editId);
+
+        // Edit new employee modal -- department field populated
+          $.ajax({
+            url: "libs/php/getPersonnelByID.php",
+            type: 'GET',
+            data: {
+              id: editId,
+            },
+            success: function (result) {
+              console.log(result);
+              console.log(result.data.personnel[0]['firstName']);
+              console.log(result.data.personnel[0]['departmentID']);
+
+              console.log(result.data.department["result.data.personnel[0]['departmentID']"])
+              editModalData = '<div id="editEmployeeModal" class="modal fade">\
+                                <div class="modal-dialog">\
+                                  <div class="modal-content">\
+                                    <form>\
+                                      <div class="modal-header">\
+                                        <h4 class="modal-title">Edit Employee</h4>\
+                                        <a type="button" class="close" data-bs-dismiss="modal" aria-hidden="true"><i\
+                                            class="far fa-window-close fa-2x"></i></a>\
+                                      </div>\
+                                      <div class="modal-body">\
+                                        <div class="form-group">\
+                                          <label>First Name</label>\
+                                          <input id="firstNameEdit" type="text" class="form-control" value="' + result.data.personnel[0]['firstName'] + '" required>\
+                                        </div>\
+                                        <div class="form-group">\
+                                          <label>Last Name</label>\
+                                          <input id="lastNameEdit" type="text" class="form-control" value="' + result.data.personnel[0]['lastName'] + '" required>\
+                                        </div>\
+                                        <div class="form-group">\
+                                          <label>Job Title</label>\
+                                          <input id="jobEdit" type="text" class="form-control" value="' + result.data.personnel[0]['jobTitle'] + '" required>\
+                                        </div>\
+                                        <div class="form-group">\
+                                          <label>Email</label>\
+                                          <input id="emailEdit" type="email" class="form-control" value="' + result.data.personnel[0]['email'] + '" required>\
+                                        </div>\
+                                        <div class="form-group">\
+                                          <label for="location">Location</label>\
+                                          <select id="locationEdit" class="form-control" name="locationID">\
+                                          </select>\
+                                        </div>\
+                                        <div class="form-group">\
+                                          <label for="department">Department</label>\
+                                          <select id="departmentEdit" class="form-control" name="departmentID">\
+                                          </select>\
+                                        </div>\
+                                      </div>\
+                                      <div class="modal-footer">\
+                                        <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">\
+                                        <input type="submit" class="btn btn-info" value="Save">\
+                                      </div>\
+                                    </form>\
+                                  </div>\
+                                </div>\
+                              </div>';
+              // $.each(result.data, function (index, value) {
+                // console.log(value.id)
+                // $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
+              // })
+            },
+            error: function (jqXHR) {
+              console.log(jqXHR);
+            }
+          })
+          // $.ajax({
+          //   url: "libs/php/getAllDepartments.php",
+          //   type: 'GET',
+          //   success: function (result) {
+          //     $.each(result.data, function (index, value) {
+          //       // console.log(value.id)
+          //       $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
+          //     })
+          //   },
+          //   error: function (jqXHR) {
+          //     console.log(jqXHR);
+          //   }
+          // })
+          // // Edit new employee modal -- location field populated
+          // $.ajax({
+          //   url: "libs/php/getAllLocations.php",
+          //   type: 'GET',
+          //   success: function (result) {
+          //     $.each(result.data, function (index, value) {
+          //       // console.log(value.id)
+          //       $('#locationEdit').append($("<option />").val(value.id).text(value.name));
+          //     })
+          //   },
+          //   error: function (jqXHR) {
+          //     console.log(jqXHR);
+          //   }
+          // })
+        })
 
     },
     error: function (jqXHR) {
