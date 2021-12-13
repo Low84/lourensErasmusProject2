@@ -50,7 +50,7 @@
       <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 
         <!-- Employee Details Table -->
-        <div id="directoryContainer" class="container">
+        <div class="container">
           <div class="table-title">
             <div class="col-sm-6">
               <h2>Manage Employees</h2>
@@ -66,9 +66,8 @@
                 <tr>
                   <th scope="col">First Name</th>
                   <th scope="col">Last Name</th>
-                  <th scope="col">Job Title</th>
-                  <th scope="col">Email</th>
-                  
+                  <th scope="col">Location</th>
+                  <th scope="col">Email</th>                  
                   <th scope="col">Department</th>
                   <th scope="col">Edit/Delete</th>
                 </tr>
@@ -84,29 +83,32 @@
       <!-- Locations -->
       <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
         <!-- Locations Table -->
-        <div id="directoryContainer" class="container">
-          <div class="table-title">
-            <div class="col-sm-6">
-              <h2>Locations</h2>
+        <div class="container">
+          <div class="row justify-content-start">
+            <div class="table-title">
+              <div class="col-sm-6">
+                <h2>Locations</h2>
+              </div>
+              <div class="col-sm-6">
+                <!-- <a href="#addEmployeeModal" class="btn btn-success addEmployee" data-bs-toggle="modal"><i
+                    class="far fa-plus-square"></i> <span class="buttonText">Add New Employee</span></a> -->
+              </div>
             </div>
-            <div class="col-sm-6">
-              <!-- <a href="#addEmployeeModal" class="btn btn-success addEmployee" data-bs-toggle="modal"><i
-                  class="far fa-plus-square"></i> <span class="buttonText">Add New Employee</span></a> -->
-            </div>
-          </div>
-          <div class=" row">
-            <table class="table table-striped test">
-              <thead>
-                <tr>
-                  <th scope="col" class="locCell">Location</th>
-                  <th scope="col">Number of Departments</th>
-                  <th scope="col">Number of Personnel</th>
-                </tr>
-              </thead>
-              <tbody id="locationData">
+            <div class="row">
+              <table class="table table-striped test">
+                <thead>
+                  <tr class="justifyTable">
+                    <th>Location</th>
+                    <th>Number of Departments</th>
+                    <th>Number of Personnel</th>
+                    <th>Edit/Delete</th>
+                  </tr>
+                </thead>
+                <tbody id="locationData">
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <!-- End of Locations Table -->
@@ -114,29 +116,32 @@
       <!-- Departments -->
       <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
         <!-- Departments Table -->
-        <div id="directoryContainer" class="container">
-          <div class="table-title">
-            <div class="col-sm-6">
-              <h2>Departments</h2>
+        <div class="container">
+          <div class="row justify-content-start">
+            <div class="table-title">
+              <div class="col-sm-6">
+                <h2>Departments</h2>
+              </div>
+              <div class="col-sm-6">
+                <!-- <a href="#addEmployeeModal" class="btn btn-success addEmployee" data-bs-toggle="modal"><i
+                    class="far fa-plus-square"></i> <span class="buttonText">Add New Employee</span></a> -->
+              </div>
             </div>
-            <div class="col-sm-6">
-              <!-- <a href="#addEmployeeModal" class="btn btn-success addEmployee" data-bs-toggle="modal"><i
-                  class="far fa-plus-square"></i> <span class="buttonText">Add New Employee</span></a> -->
-            </div>
-          </div>
-          <div class=" row">
-            <table class="table table-striped test">
-              <thead>
-                <tr>
-                  <th scope="col">Department</th>
-                  <th scope="col">Location</th>
-                  <th scope="col">Number of Personnel</th>
-                </tr>
-              </thead>
-              <tbody id="departData">
+            <div class="row">
+              <table class="table table-striped test">
+                <thead>
+                  <tr class="justifyTable">
+                    <th>Department</th>
+                    <th>Location</th>
+                    <th>Number of Personnel</th>
+                    <th>Edit/Delete</th>
+                  </tr>
+                </thead>
+                <tbody id="departData">
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <!-- End of Departments Table -->
