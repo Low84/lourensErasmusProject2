@@ -1,11 +1,11 @@
 // Populate employee table and initialize data tables
 $(document).ready(function () {
-  $('.test').DataTable();
-  $('[data-toggle="tooltip"]').tooltip();
+  // $('.test').DataTable();
+  // $('[data-toggle="tooltip"]').tooltip();
   let data;
   let locData;
   let deptData;
-
+  let searchValue;
 
   $.ajax({
     url: "libs/php/getAll.php",
@@ -56,7 +56,7 @@ $(document).ready(function () {
     url: "libs/php/getAllDepartments.php",
     type: 'GET',
     success: function (result) {
-      console.log(result);
+      // console.log(result);
       $.each(result.data, function (index, value) {
         // console.log(value.name);
         deptData += '<tr><td data-title="Department">' + value.name + "</td><td data-title='Depart. Location'>" + value.location + "</td><td data-title='No Of Depts'>" + value.count + "</td>";
@@ -72,8 +72,9 @@ $(document).ready(function () {
       console.log(jqXHR);
     }
   })
+  
 
-  // Add new employee model -- department field populated
+  // Add new employee modal -- department field populated
   $.ajax({
     url: "libs/php/getAllDepartments.php",
     type: 'GET',
@@ -84,7 +85,7 @@ $(document).ready(function () {
       })
     },
   })
-  // Add new employee model -- location field populated
+  // Add new employee modal -- location field populated
   $.ajax({
     url: "libs/php/getAllLocations.php",
     type: 'GET',
@@ -95,6 +96,59 @@ $(document).ready(function () {
       })
     },
   })
+
+  $('editEmployeeModal').click(function() {
+    // Edit new employee modal -- department field populated
+    $.ajax({
+      url: "libs/php/getPersonnelByID.php",
+      type: 'GET',
+      // data: {
+      //   id: id
+      // }
+      success: function (result) {
+        console.log(result);
+        // $.each(result.data, function (index, value) {
+          // console.log(value.id)
+          // $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
+        // })
+      },
+      error: function (jqXHR) {
+        console.log(jqXHR);
+      }
+    })
+    $.ajax({
+      url: "libs/php/getAllDepartments.php",
+      type: 'GET',
+      success: function (result) {
+        $.each(result.data, function (index, value) {
+          // console.log(value.id)
+          $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
+        })
+      },
+      error: function (jqXHR) {
+        console.log(jqXHR);
+      }
+    })
+    // Edit new employee modal -- location field populated
+    $.ajax({
+      url: "libs/php/getAllLocations.php",
+      type: 'GET',
+      success: function (result) {
+        $.each(result.data, function (index, value) {
+          // console.log(value.id)
+          $('#locationEdit').append($("<option />").val(value.id).text(value.name));
+        })
+      },
+      error: function (jqXHR) {
+        console.log(jqXHR);
+      }
+    })
+  }) 
+
+
+
+
+
 
 })
 
@@ -192,3 +246,4 @@ const Toast = Swal.mixin({
     //   },
     // })
 
+    
