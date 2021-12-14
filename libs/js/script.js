@@ -1,18 +1,21 @@
 // Populate employee table and initialize data tables
 $(document).ready(function () {
-  // $('.test').DataTable();
-  // $('[data-toggle="tooltip"]').tooltip();
+  
   let data;
   let locData;
   let deptData;
   let editId;
   let userDeptId;
 
+  // Searchbar
+  $('.test').DataTable();
+  $('[data-toggle="tooltip"]').tooltip();
+
   $.ajax({
     url: "libs/php/getAll.php",
     type: 'GET',
     success: function (result) {
-      console.log(result)
+      // console.log(result)
       $.each(result.data, function (index, value) {
         data += "<tr like data-personnel-id='" + value.id + "'><td data-title='id'>" + value.id + "</td><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
         // console.log(value.location);
@@ -31,7 +34,7 @@ $(document).ready(function () {
 
         editId = $(this).closest('tr').data('personnel-id');
 
-        console.log(editId);
+        // console.log(editId);
 
         // Edit new employee modal -- department field populated
           $.ajax({
@@ -42,9 +45,10 @@ $(document).ready(function () {
             },
             success: function (result) {
               let departmentID = result.data.personnel[0]['departmentID'];
-              console.log(result);
-              console.log(result.data.personnel[0]['firstName']);
-              console.log(result.data.personnel[0]['departmentID']);
+              // console.log(result);
+              // console.log(result.data.personnel[0]['firstName']);
+              // console.log(result.data.personnel[0]['departmentID']);
+              $('#idEdit').attr("value", result.data.personnel[0]['id']);
               $('#firstNameEdit').attr("value", result.data.personnel[0]['firstName']);
               $('#lastNameEdit').attr("value", result.data.personnel[0]['lastName']);
               $('#jobEdit').attr("value", result.data.personnel[0]['jobTitle']);
@@ -58,10 +62,10 @@ $(document).ready(function () {
                 },
                 success: function (result) {
                   let departmentName = result.data[0]['name'];
-                  console.log(result);
-                  console.log(result.data[0]['locationID']);
+                  // console.log(result);
+                  // console.log(result.data[0]['locationID']);
                   let locationNameId = (result.data[0]['locationID']);
-                  console.log(result.data[0]['name']);
+                  // console.log(result.data[0]['name']);
 
                   $.ajax({
                     url: "libs/php/getAllDepartments.php",
@@ -70,7 +74,7 @@ $(document).ready(function () {
                       $.each(result.data, function (index, value) {
                         // console.log(value.id)
                         $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
-                        console.log(locationNameId);
+                        // console.log(locationNameId);
                       })
                         $.ajax({
                           url: "libs/php/getLocationByID.php",
@@ -79,7 +83,7 @@ $(document).ready(function () {
                             id: locationNameId
                           },
                           success: function (result) {
-                            console.log(result);
+                            // console.log(result);
                             let locationName = result.data[0]['name'];
 
                             $.ajax({
@@ -87,7 +91,7 @@ $(document).ready(function () {
                               type: 'GET',
                               success: function (result) {
                                 $.each(result.data, function (index, value) {
-                                  console.log(value.id)
+                                  // console.log(value.id)
                                   $('#locationEdit').append($("<option />").val(value.id).text(value.name));
                                 })
                                 $('#locationEdit').append($("<option selected/>").val(locationNameId).text(locationName));
@@ -209,7 +213,7 @@ function getId(id) {
         url: "libs/php/deleteEmployee.php",
         data: { 'id': id },
         success: function (data) {
-          console.log(data)
+          // console.log(data)
           Swal.fire(
             'Deleted!',
             'Your file has been deleted.',
