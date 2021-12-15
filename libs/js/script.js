@@ -8,22 +8,22 @@ $(document).ready(function () {
   let userDeptId;
 
   // Searchbar
-  // $('.test').DataTable();
+  $('.test').DataTable();
   $('[data-toggle="tooltip"]').tooltip();
   
-  $('#personnelTable').DataTable({
+//   $('#personnelTable').DataTable({
   
-    // Enable the searching
-    // of the DataTable
-    searching: true
-});
+//     // Enable the searching
+//     // of the DataTable
+//     searching: true
+// });
   $.ajax({
     url: "libs/php/getAll.php",
     type: 'GET',
     success: function (result) {
       // console.log(result)
       $.each(result.data, function (index, value) {
-        data += "<tr like data-personnel-id='" + value.id + "'><td data-title='id'>" + value.id + "</td><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
+        data += "<tr data-personnel-id='" + value.id + "'><td data-title='id'>" + value.id + "</td><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
         // console.log(value.location);
         data += "\
                   <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'  data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
@@ -36,12 +36,13 @@ $(document).ready(function () {
 
       
       $('#user_data').html(data);
+
       $('a[data-bs-target="#editEmployeeModal"]').click(function() {
-
+ 
         editId = $(this).closest('tr').data('personnel-id');
-
+ 
         // console.log(editId);
-
+ 
         // Edit new employee modal -- department field populated
           $.ajax({
             url: "libs/php/getPersonnelByID.php",
@@ -50,79 +51,17 @@ $(document).ready(function () {
               id: editId,
             },
             success: function (result) {
+              console.log(result);
               let departmentID = result.data.personnel[0]['departmentID'];
               // console.log(result);
               // console.log(result.data.personnel[0]['firstName']);
-              console.log(result.data.personnel[0]['departmentID']);
+              // console.log(result.data.personnel[0]['departmentID']);
               $('#idEdit').attr("value", result.data.personnel[0]['id']);
               $('#firstNameEdit').attr("value", result.data.personnel[0]['firstName']);
               $('#lastNameEdit').attr("value", result.data.personnel[0]['lastName']);
               $('#jobEdit').attr("value", result.data.personnel[0]['jobTitle']);
               $('#emailEdit').attr("value", result.data.personnel[0]['email']);
-
-              $.ajax({
-                url: "libs/php/getDepartmentByID.php",
-                type: 'GET',
-                data: {
-                  id: result.data.personnel[0]['departmentID']
-                },
-                success: function (result) {
-                  let departmentName = result.data[0]['name'];
-                  // console.log(result);
-                  // console.log(result.data[0]['locationID']);
-                  let locationNameId = (result.data[0]['locationID']);
-                  // console.log(result.data[0]['name']);
-
-                  $.ajax({
-                    url: "libs/php/getAllDepartments.php",
-                    type: 'GET',
-                    success: function (result) {
-                      $.each(result.data, function (index, value) {
-                        // console.log(value.id)
-                        $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
-                        // console.log(locationNameId);
-                      })
-                        $.ajax({
-                          url: "libs/php/getLocationByID.php",
-                          type: 'GET',
-                          data: {
-                            id: locationNameId
-                          },
-                          success: function (result) {
-                            // console.log(result);
-                            let locationName = result.data[0]['name'];
-
-                            $.ajax({
-                              url: "libs/php/getAllLocations.php",
-                              type: 'GET',
-                              success: function (result) {
-                                $.each(result.data, function (index, value) {
-                                  // console.log(value.id)
-                                  $('#locationEdit').append($("<option />").val(value.id).text(value.name));
-                                  $('#editDepartLocation').append($("<option />").val(value.id).text(value.name));
-
-                                })
-                                $('#locationEdit').append($("<option selected/>").val(locationNameId).text(locationName));
-
-                              },
-                            })                                                       
-                          },
-                          error: function (jqXHR) {
-                            console.log(jqXHR);
-                          }
-                        // })
-                      })
-                      $('#departmentEdit').append($("<option selected/>").val(departmentID).text(departmentName));
-
-                    },
-                  })
-
-                  $('#editEmployeeModal').modal('show');
-                },
-                error: function (jqXHR) {
-                  console.log(jqXHR);
-                }
-              })
+              $("#departmentEdit").val(result.data.personnel[0].departmentID).change();
               
             },
             error: function (jqXHR) {
@@ -130,7 +69,6 @@ $(document).ready(function () {
             }
           })
         })
-
     },
     error: function (jqXHR) {
       console.log(jqXHR);
@@ -146,10 +84,12 @@ $(document).ready(function () {
         // console.log(value.name);
         locData += '<tr><td data-title="ID">' + value.id + '</td><td data-title="Location">' + value.name + '</td><td>NoD</td><td>' + 'NoP' + '</td>';
         locData += "\
-                  <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
+                  <td data-title='Edit/Delete'><a href='#editLocationModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#deleteEmployeeModal' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
+                  $('#location').append($("<option />").val(value.id).text(value.name));
+                  $('#editDepartLocation').append($("<option />").val(value.id).text(value.name));
       })
       $('#locationData').html(locData);
       
@@ -163,17 +103,21 @@ $(document).ready(function () {
     url: "libs/php/getAllDepartments.php",
     type: 'GET',
     success: function (result) {
-      // console.log(result);
+      console.log(result);
       $.each(result.data, function (index, value) {
-        // console.log(value.name);
+        console.log(value.id);
         // console.log(value.location);
 
         deptData += '<tr><td data-title="ID">' + 'ID' + '</td><td data-title="Department">' + value.name + '</td><td data-title="Depart. Location">' + value.location + '</td><td data-title="No Of Depts">' + value.count + "</td>";
         deptData += "\
-                  <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
+                  <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal' data-bs-target='#editDepartModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
+                  $('#department').append(`<option value="${value.id}">${value.name}<option />`);
+                  $('#departmentEdit').append(`<option value="${value.id}">${value.name}<option />`);
+                  
+
       })
       $('#departData').html(deptData);
     },
@@ -184,30 +128,99 @@ $(document).ready(function () {
   
 
   // Add new employee modal -- department field populated
-  $.ajax({
-    url: "libs/php/getAllDepartments.php",
-    type: 'GET',
-    success: function (result) {
-      $.each(result.data, function (index, value) {
-        // console.log(value.id)
+  // $.ajax({
+  //   url: "libs/php/getAllDepartments.php",
+  //   type: 'GET',
+  //   success: function (result) {
+  //     $.each(result.data, function (index, value) {
+  //       // console.log(value.id)
 
-        $('#department').append($("<option />").val(value.id).text(value.name));
-      })
-    },
-  })
+  //       $('#department').append($("<option />").val(value.id).text(value.name));
+  //     })
+  //   },
+  // })
   // Add new employee modal -- location field populated
-  $.ajax({
-    url: "libs/php/getAllLocations.php",
-    type: 'GET',
-    success: function (result) {
-      $.each(result.data, function (index, value) {
-        // console.log(value.id)
-        $('#location').append($("<option />").val(value.id).text(value.name));
-        $('#editDepartLocation').append($("<option />").val(value.id).text(value.name));
+  // $.ajax({
+  //   url: "libs/php/getAllLocations.php",
+  //   type: 'GET',
+  //   success: function (result) {
+  //     $.each(result.data, function (index, value) {
+  //       // console.log(value.id)
+  //       $('#location').append($("<option />").val(value.id).text(value.name));
+  //       $('#editDepartLocation').append($("<option />").val(value.id).text(value.name));
 
-      })
-    },
-  })
+  //     })
+  //   },
+  // })
+
+  // Edit Employee
+  $("#editEmployeeSubmit").click(function(){
+    $.ajax({
+      url:"libs/php/editEmployee.php",
+      type: "POST",
+      dataType: "JSON",
+      data:{
+        id: $(`td:contains("${$('#firstNameEdit').val()}")`).closest('tr').data('personnel-id'),
+              firstName:$('#firstNameEdit').val(),
+              lastName:$('#lastNameEdit').val(),
+              jobTitle:$('#jobEdit').val(),
+              email:$('#emailEdit').val(),
+              deptId:$("#departmentEdit").val()
+      },
+      success: function(result){
+        console.log(result);
+      },
+      error:function(jqXHR){
+        console.log(jqXHR);
+      }
+    });
+  });
+
+  // Add employee
+  $("#addEmployeeSubmit").click(function(){
+    $.ajax({
+      url:"libs/php/insertEmployee.php",
+      type: "POST",
+      dataType: "JSON",
+      data:{
+              firstName:$('#addFirstName').val(),
+              lastName:$('#addLastName').val(),
+              jobTitle:$('#addJobTitle').val(),
+              email:$('#addEmail').val(),
+              deptId:$("#departmentEdit").val()
+      },
+      success: function(result){
+        console.log(result);
+      },
+      error:function(jqXHR){
+        console.log(jqXHR);
+      }
+    });
+  });
+
+  // $("#addNewEmployee").submit(function (e) {
+  //   e.preventDefault();
+  
+  //   var form = $(this);
+  //   var url = form.attr('action');
+  //   // console.log(form)
+  //   $.ajax({
+  //     type: "POST",
+  //     url: url,
+  //     data: form.serialize(), // serializes the form's elements.
+  //     success: function (data) {
+  //       $('#addEmployeeModal').modal('hide');
+  //       Toast.fire({
+  //         icon: 'success',
+  //         title: 'Successfully added an employee'
+  //       })
+  //     }
+  //   });
+  
+  
+  // });
+
+
 })
 
 function getId(id) {
