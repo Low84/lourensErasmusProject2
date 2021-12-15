@@ -1,294 +1,279 @@
-// Populate employee table and initialize data tables
-$(document).ready(function () {
-  
-  let data;
-  let locData;
-  let deptData;
-  let editId;
-  let userDeptId;
-
-  // Searchbar
-  $('.test').DataTable();
-  $('[data-toggle="tooltip"]').tooltip();
-
-  $.ajax({
-    url: "libs/php/getAll.php",
-    type: 'GET',
-    success: function (result) {
-      // console.log(result)
-      $.each(result.data, function (index, value) {
-        data += "<tr like data-personnel-id='" + value.id + "'><td data-title='id'>" + value.id + "</td><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
-        // console.log(value.location);
-        data += "\
-                  <td><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'  data-bs-target='editEmployeeModal'><i class='far fa-edit'\
-                  data-toggle='tooltip' title='Edit'></i></a>\
-                  <a href='#' class='delete' onclick='getId(" + value.id + ")' data-bs-toggle='modal'><i class='far fa-trash-alt'\
-                  data-toggle='tooltip' title='Delete'></i></a></td></tr>";
-
-                  
-      })
-
-      
-      $('#user_data').html(data);
-      $('a[data-bs-target="editEmployeeModal"]').click(function() {
-
-        editId = $(this).closest('tr').data('personnel-id');
-
-        // console.log(editId);
-
-        // Edit new employee modal -- department field populated
-          $.ajax({
-            url: "libs/php/getPersonnelByID.php",
-            type: 'GET',
-            data: {
-              id: editId,
-            },
-            success: function (result) {
-              let departmentID = result.data.personnel[0]['departmentID'];
-              // console.log(result);
-              // console.log(result.data.personnel[0]['firstName']);
-              // console.log(result.data.personnel[0]['departmentID']);
-              $('#idEdit').attr("value", result.data.personnel[0]['id']);
-              $('#firstNameEdit').attr("value", result.data.personnel[0]['firstName']);
-              $('#lastNameEdit').attr("value", result.data.personnel[0]['lastName']);
-              $('#jobEdit').attr("value", result.data.personnel[0]['jobTitle']);
-              $('#emailEdit').attr("value", result.data.personnel[0]['email']);
-
-              $.ajax({
-                url: "libs/php/getDepartmentByID.php",
-                type: 'GET',
-                data: {
-                  id: result.data.personnel[0]['departmentID']
-                },
-                success: function (result) {
-                  let departmentName = result.data[0]['name'];
-                  // console.log(result);
-                  // console.log(result.data[0]['locationID']);
-                  let locationNameId = (result.data[0]['locationID']);
-                  // console.log(result.data[0]['name']);
-
-                  $.ajax({
-                    url: "libs/php/getAllDepartments.php",
-                    type: 'GET',
-                    success: function (result) {
-                      $.each(result.data, function (index, value) {
-                        // console.log(value.id)
-                        $('#departmentEdit').append($("<option />").val(value.id).text(value.name));
-                        // console.log(locationNameId);
-                      })
-                        $.ajax({
-                          url: "libs/php/getLocationByID.php",
-                          type: 'GET',
-                          data: {
-                            id: locationNameId
-                          },
-                          success: function (result) {
-                            // console.log(result);
-                            let locationName = result.data[0]['name'];
-
-                            $.ajax({
-                              url: "libs/php/getAllLocations.php",
-                              type: 'GET',
-                              success: function (result) {
-                                $.each(result.data, function (index, value) {
-                                  // console.log(value.id)
-                                  $('#locationEdit').append($("<option />").val(value.id).text(value.name));
-                                })
-                                $('#locationEdit').append($("<option selected/>").val(locationNameId).text(locationName));
-
-                              },
-                            })                                                       
-                          },
-                          error: function (jqXHR) {
-                            console.log(jqXHR);
-                          }
-                        // })
-                      })
-                      $('#departmentEdit').append($("<option selected/>").val(departmentID).text(departmentName));
-
-                    },
-                  })
-
-                  $('#editEmployeeModal').modal('show');
-                },
-                error: function (jqXHR) {
-                  console.log(jqXHR);
-                }
-              })
-              
-            },
-            error: function (jqXHR) {
-              console.log(jqXHR);
-            }
-          })
-        })
-
-    },
-    error: function (jqXHR) {
-      console.log(jqXHR);
-    }
-  })
-
-  $.ajax({
-    url: "libs/php/getAllLocations.php",
-    type: 'GET',
-    success: function (result) {
-      // console.log(result);
-      $.each(result.data, function (index, value) {
-        // console.log(value.name);
-        locData += '<tr><td data-title="Location">' + value.name + "</td><td>" + "NoD" + "</td><td>" + "NoP" + "</td>";
-        locData += "\
-                  <td><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
-                  data-toggle='tooltip' title='Edit'></i></a>\
-                  <a href='#deleteEmployeeModal' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
-                  data-toggle='tooltip' title='Delete'></i></a></td></tr>";
-      })
-      $('#locationData').html(locData);
-      
-    },
-    error: function (jqXHR) {
-      console.log(jqXHR);
-    }
-  })
-
-  $.ajax({
-    url: "libs/php/getAllDepartments.php",
-    type: 'GET',
-    success: function (result) {
-      // console.log(result);
-      $.each(result.data, function (index, value) {
-        // console.log(value.name);
-        deptData += '<tr><td data-title="Department">' + value.name + "</td><td data-title='Depart. Location'>" + value.location + "</td><td data-title='No Of Depts'>" + value.count + "</td>";
-        deptData += "\
-                  <td class='col-sm'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
-                  data-toggle='tooltip' title='Edit'></i></a>\
-                  <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
-                  data-toggle='tooltip' title='Delete'></i></a></td></tr>";
-      })
-      $('#departData').html(deptData);
-    },
-    error: function (jqXHR) {
-      console.log(jqXHR);
-    }
-  })
-  
-
-  // Add new employee modal -- department field populated
-  $.ajax({
-    url: "libs/php/getAllDepartments.php",
-    type: 'GET',
-    success: function (result) {
-      $.each(result.data, function (index, value) {
-        // console.log(value.id)
-        $('#department').append($("<option />").val(value.id).text(value.name));
-      })
-    },
-  })
-  // Add new employee modal -- location field populated
-  $.ajax({
-    url: "libs/php/getAllLocations.php",
-    type: 'GET',
-    success: function (result) {
-      $.each(result.data, function (index, value) {
-        // console.log(value.id)
-        $('#location').append($("<option />").val(value.id).text(value.name));
-      })
-    },
-  })
-})
-
-function getId(id) {
-  Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.ajax({
-        type: "POST",
-        url: "libs/php/deleteEmployee.php",
-        data: { 'id': id },
-        success: function (data) {
-          // console.log(data)
-          Swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-          )
-        }
-      });
-
-    }
-  })
+body {
+  color: #566787;
+  /* background: #f5f5f5; */
+  font-family: 'Rokkitt', serif;
+  font-size: 16px;
 }
 
+.nav-tabs {
+  font-size: 1.3rem;
+  display:inline-flex;
+}
 
-// $('#employeeDeleteBtn').click(function (event) {
-//   alert(id)
-//   $.ajax({
-//     type: "POST",
-//     url: "libs/php/deleteEmployee.php",
-//     data: { 'id': id },
-//     success: function (data) {
-//       console.log(data)
-//       Toast.fire({
-//         icon: 'success',
-//         title: 'Great Success'
-//       })
-//     }
-//   });
-// })
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+  color: #fff;
+  background-color: #435d7d;
+  border-color: #dee2e6 #dee2e6 #fff;
+}
 
+.nav-tabs .nav-link {
+  color: black;
+  border-color: #dee2e6 #dee2e6 #fff;
+}
 
+.table-title {        
+    padding-bottom: 15px;
+    background: #435d7d;
+    color: #fff;
+    padding: 16px 30px;
+    margin: 0px -25px 10px;
+    border-radius: 3px 3px 0 0;
+    display: -webkit-box;
+}
+.table-title h2 {
+    margin: 5px 0 0;
+    font-size: 2rem;
+}
+.table-title .btn-group {
+    float: right;
+}
+.table-title .btn {
+    color: #fff;
+    float: right;
+    font-size: 13px;
+    border: none;
+    min-width: 50px;
+    border-radius: 2px;
+    border: none;
+    outline: none !important;
+    margin-left: 10px;
+}
+.table-title .btn i {
+    float: left;
+    font-size: 21px;
+    margin-right: 5px;
+}
+.table-title .btn span {
+    float: left;
+    margin-top: 2px;
+}
 
-// Handle employee add form with Ajax
-// Still need to add a proper response when added successfully. Check out sweet alerts or if Bootstrap's toasts work
-$("#addNewEmployee").submit(function (e) {
-  e.preventDefault();
+.buttonText {
+    padding-left: 10px;
+}
 
-  var form = $(this);
-  var url = form.attr('action');
-  // console.log(form)
-  $.ajax({
-    type: "POST",
-    url: url,
-    data: form.serialize(), // serializes the form's elements.
-    success: function (data) {
-      $('#addEmployeeModal').modal('hide');
-      Toast.fire({
-        icon: 'success',
-        title: 'Successfully added an employee'
-      })
+.addEmployee {
+    float: right;
+}
+
+.justifyTable {
+  align-items: flex-start;
+}
+
+th {
+  font-size: 1rem;
+}
+
+table.table tr th, table.table tr td {
+    border-color: #e9e9e9;
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+table.table tr th:first-child {
+    width: 60px;
+}
+table.table tr th:last-child {
+    width: 100px;
+}
+table.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #fcfcfc;
+}
+table.table-striped.table-hover tbody tr:hover {
+    background: #f5f5f5;
+}
+table.table th i {
+    font-size: 1.5rem;
+    margin: 0 5px;
+    cursor: pointer;
+}	
+table.table td:last-child i {
+    opacity: 0.9;
+    font-size: 22px;
+    margin: 0 5px;
+}
+/* table.table td a {
+    font-weight: bold;
+    color: #566787;
+    display: inline-block;
+    text-decoration: none;
+    outline: none !important;
+} */
+table.table td a:hover {
+    color: #2196F3;
+}
+table.table td a.edit {
+    color: #FFC107;
+}
+table.table td a.delete {
+    color: #F44336;
+}
+table.table td i {
+    font-size: 2.1rem;
+}
+table.table .avatar {
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+/* Searchbar */
+input[type=text] {
+  /* float: right; */
+  
+  padding: 6px;
+  border: 1px solid black;
+  border-radius: 3px;
+  margin-top: 8px;
+  margin-right: 16px;
+  font-size: 17px;
+}
+
+#searchBtn {
+  padding: 2px 6px;
+  border-radius: 3px;
+  background-color: rgb(192, 191, 191);
+}
+
+.pagination {
+    float: right;
+    margin: 0 0 5px;
+}
+.pagination li a {
+    border: none;
+    font-size: 1rem;
+    min-width: 30px;
+    min-height: 30px;
+    color: #999;
+    margin: 0 2px;
+    line-height: 30px;
+    border-radius: 2px !important;
+    text-align: center;
+    padding: 0 6px;
+}
+.pagination li a:hover {
+    color: #666;
+}	
+.pagination li.active a, .pagination li.active a.page-link {
+    background: #03A9F4;
+}
+.pagination li.active a:hover {        
+    background: #0397d6;
+}
+.pagination li.disabled i {
+    color: #ccc;
+}
+.pagination li i {
+    font-size: 1rem;
+    padding-top: 6px
+}
+.hint-text {
+    float: left;
+    margin-top: 10px;
+    font-size: 1.2rem;
+}    
+
+/* Modal styles */
+.modal .modal-dialog {
+    max-width: 400px;
+}
+.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+    padding: 20px 30px;
+}
+.modal .modal-content {
+    border-radius: 3px;
+}
+.modal .modal-footer {
+    background: #ecf0f1;
+    border-radius: 0 0 3px 3px;
+}
+.modal .modal-title {
+    display: inline-block;
+}
+.modal .form-control {
+    border-radius: 2px;
+    box-shadow: none;
+    border-color: #dddddd;
+}
+.modal textarea.form-control {
+    resize: vertical;
+}
+.modal .btn {
+    border-radius: 2px;
+    min-width: 100px;
+}	
+.modal form label {
+    font-weight: normal;
+}
+
+/* Hiding the ID column */
+th:nth-of-type(1) {
+  display: none;
+}
+
+td:nth-of-type(1) {
+  display: none;
+}
+
+@media only screen and (max-width: 800px) {
+	
+	/* Force table to not be like tables anymore */
+	 table, 
+	 thead, 
+   tbody, 
+	 th, 
+	 td, 
+	 tr { 
+		display: block; 
+	}
+ 
+	/* Hide table headers (but not display: none;, for accessibility) */
+   thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+ 
+	 tr { 
+     margin: 0 0 1rem 0;
+     border: 1px solid #ccc; 
     }
-  });
-
-
-});
-
-// Sweetalert toast initialize
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
+ 
+	 td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+		white-space: normal;
+		text-align: right;
+	}
+ 
+	 td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 27%;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+		text-align:left;
+		font-weight: bold;
+	}
+ 
+	/* Label the data */
+	
+  td:before { 
+    content: attr(data-title); 
   }
-})
-
-
-    // $.ajax({
-    //   url: "libs/php/deleteEmployee.php",
-    //   type: 'GET',
-    //   success: function (result) {
-    //    console.log(result)
-    //   },
-    // })
-
-    
+}
