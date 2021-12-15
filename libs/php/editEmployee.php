@@ -36,11 +36,8 @@
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
-
-	$query = $conn->prepare('UPDATE personnel SET (firstName, lastName, jobTitle, email, department) VALUES(?,?,?,?,?) WHERE id=?');
-	$query->bind_param("sssssi", $_REQUEST['firstNameEdit'], $_REQUEST['lastNameEdit'], $_REQUEST['jobTitleEdit'], $_REQUEST['emailEdit'], $_REQUEST['departmentEdit'], $_REQUEST['idEdit']);
-
-  // UPDATE `personnel` SET `firstName`='[value-2]',`lastName`='[value-3]',`jobTitle`='[value-4]',`email`='[value-5]',`departmentID`='[value-6]' WHERE 1
+  $query = $conn->prepare('UPDATE personnel SET firstName=?, lastName=?, jobTitle=?, email=?, departmentID=? WHERE id=?');
+  $query->bind_param("ssssii", $_REQUEST['firstName'], $_REQUEST['lastName'], $_REQUEST['jobTitle'], $_REQUEST['email'], $_REQUEST['deptId'], $_REQUEST['id']);
 
 	$query->execute();
 	
