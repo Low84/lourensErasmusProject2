@@ -127,8 +127,8 @@ table.table .avatar {
 }
 
 /* Searchbar */
-input[type=text] {
-  /* float: right; */
+/* input[type=text] {
+  float: right;
   
   padding: 6px;
   border: 1px solid black;
@@ -136,19 +136,19 @@ input[type=text] {
   margin-top: 8px;
   margin-right: 16px;
   font-size: 17px;
-}
+} */
 
-#searchBtn {
+/* #searchBtn {
   padding: 2px 6px;
   border-radius: 3px;
   background-color: rgb(192, 191, 191);
-}
+} */
 
-.pagination {
+/*.pagination {
     float: right;
     margin: 0 0 5px;
 }
-.pagination li a {
+ .pagination li a {
     border: none;
     font-size: 1rem;
     min-width: 30px;
@@ -180,7 +180,7 @@ input[type=text] {
     float: left;
     margin-top: 10px;
     font-size: 1.2rem;
-}    
+}  */   
 
 /* Modal styles */
 .modal .modal-dialog {
