@@ -26,7 +26,7 @@ $(document).ready(function () {
         data += "<tr like data-personnel-id='" + value.id + "'><td data-title='id'>" + value.id + "</td><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
         // console.log(value.location);
         data += "\
-                  <td><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'  data-bs-target='editEmployeeModal'><i class='far fa-edit'\
+                  <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'  data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' onclick='getId(" + value.id + ")' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
@@ -36,7 +36,7 @@ $(document).ready(function () {
 
       
       $('#user_data').html(data);
-      $('a[data-bs-target="editEmployeeModal"]').click(function() {
+      $('a[data-bs-target="#editEmployeeModal"]').click(function() {
 
         editId = $(this).closest('tr').data('personnel-id');
 
@@ -53,7 +53,7 @@ $(document).ready(function () {
               let departmentID = result.data.personnel[0]['departmentID'];
               // console.log(result);
               // console.log(result.data.personnel[0]['firstName']);
-              // console.log(result.data.personnel[0]['departmentID']);
+              console.log(result.data.personnel[0]['departmentID']);
               $('#idEdit').attr("value", result.data.personnel[0]['id']);
               $('#firstNameEdit').attr("value", result.data.personnel[0]['firstName']);
               $('#lastNameEdit').attr("value", result.data.personnel[0]['lastName']);
@@ -99,6 +99,8 @@ $(document).ready(function () {
                                 $.each(result.data, function (index, value) {
                                   // console.log(value.id)
                                   $('#locationEdit').append($("<option />").val(value.id).text(value.name));
+                                  $('#editDepartLocation').append($("<option />").val(value.id).text(value.name));
+
                                 })
                                 $('#locationEdit').append($("<option selected/>").val(locationNameId).text(locationName));
 
@@ -141,10 +143,10 @@ $(document).ready(function () {
     success: function (result) {
       // console.log(result);
       $.each(result.data, function (index, value) {
-        console.log(value.name);
-        locData += '<tr><td data-title="Location">' + value.name + "</td><td>" + "NoD" + "</td><td>" + "NoP" + "</td>";
+        // console.log(value.name);
+        locData += '<tr><td data-title="ID">' + value.id + '</td><td data-title="Location">' + value.name + '</td><td>NoD</td><td>' + 'NoP' + '</td>';
         locData += "\
-                  <td><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
+                  <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#deleteEmployeeModal' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
@@ -164,9 +166,11 @@ $(document).ready(function () {
       // console.log(result);
       $.each(result.data, function (index, value) {
         // console.log(value.name);
-        deptData += '<tr><td data-title="Department">' + value.name + "</td><td data-title='Depart. Location'>" + value.location + "</td><td data-title='No Of Depts'>" + value.count + "</td>";
+        // console.log(value.location);
+
+        deptData += '<tr><td data-title="ID">' + 'ID' + '</td><td data-title="Department">' + value.name + '</td><td data-title="Depart. Location">' + value.location + '</td><td data-title="No Of Depts">' + value.count + "</td>";
         deptData += "\
-                  <td class='col-sm'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
+                  <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
@@ -186,6 +190,7 @@ $(document).ready(function () {
     success: function (result) {
       $.each(result.data, function (index, value) {
         // console.log(value.id)
+
         $('#department').append($("<option />").val(value.id).text(value.name));
       })
     },
@@ -198,6 +203,8 @@ $(document).ready(function () {
       $.each(result.data, function (index, value) {
         // console.log(value.id)
         $('#location').append($("<option />").val(value.id).text(value.name));
+        $('#editDepartLocation').append($("<option />").val(value.id).text(value.name));
+
       })
     },
   })
