@@ -11,6 +11,8 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" type="text/css" href="./vendors/css/bootstrap.css" />
   <link rel="stylesheet" type="text/css" href="./vendors/css/datatables.min.css" />
+  <link rel="stylesheet" type="text/css" href="./vendors/css/datatables.css" />
+  <link rel="stylesheet" type="text/css" href="./vendors/css/searchPanes.dataTables.min.css" />
 
   <!-- Font-Awesome -->
   <link rel="stylesheet" href="./vendors/font-awesome/css/font-awesome.min.css">
@@ -27,7 +29,10 @@
   <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="180x180" href="./libs/images/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="./libs/images/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="./libs/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./libs/images/favicon-16x16.png">
+  <link rel="android-chrome-192x192" type="image/png" sizes="192x192" href="./libs/images/android-chrome-192x192.png">
+  <link rel="android-chrome-512x512" type="image/png" sizes="512x512" href="./libs/images/android-chrome-512x512.png">
+
   <link rel="manifest" href="./libs/images/site.webmanifest">
 
 
@@ -64,7 +69,7 @@
             <input id="searchValue" type="text" placeholder="Search..."><button type="submit" id="searchBtn"><i class="fas fa-search"></i></button>
           </div> -->
           <div class=" row">
-            <table class="table table-striped test">
+            <table id="personnelTable"class="table table-striped test">
               <thead>
                 <tr>
                   <th scope="col">ID</th>
@@ -244,6 +249,10 @@
               <select id="departmentEdit" class="form-control" name="departmentEdit" name="departmentID">
               </select>
             </div>
+            <div class="form-group">
+              <input type="checkbox" id="confirmEdit" name="editCheckbox" value="edit">
+              <label for="editCheckbox">Please confirm changes</label><br>
+            </div>
           </div>
           <div class="modal-footer">
             <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
@@ -284,6 +293,8 @@
   <script type="application/javascript" src="./vendors/js/bootstrap.bundle.js"></script>
   <!-- Bootstrap DataTables -->
   <script type="application/javascript" src="./vendors/js/datatables.min.js"></script>
+  <script type="application/javascript" src="./vendors/js/searchPanes.dataTables.min.js"></script>
+  <script type="application/javascript" src="./vendors/js/datatables.js"></script>
 
   <script type="application/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
