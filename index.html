@@ -34,7 +34,7 @@
   <title>Company Directory</title>
 </head>
 
-<body>
+<div>
   <div id="navButtons" class="container">
     <nav>
       <div class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
@@ -46,12 +46,12 @@
           type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Departments</button>
       </div>
     </nav>
-    <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 
         <!-- Employee Details Table -->
-        <div class="container">
-          <div class="row justify-content-start">
+      <div class="container">
+        <div class="row justify-content-start">
 
           <div class="table-title">
             <div class="col-sm-6">
@@ -82,11 +82,11 @@
 
               </tbody>
             </table>
-            </div>
           </div>
         </div>
-        <!-- End of Employee Details Table -->
       </div>
+        <!-- End of Employee Details Table -->
+    </div>
       <!-- Locations -->
       <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
         <!-- Locations Table -->
@@ -156,9 +156,8 @@
         <!-- End of Departments Table -->
 
       </div>
-    </div>
   </div>
-
+</div>
   <!-- Modals -->
   <!-- Add employee Modal -->
   <div id="addEmployeeModal" class="modal fade">
@@ -202,7 +201,7 @@
           </div>
         <!-- </form> -->
       </div>
-    </div>
+    <!-- </div> -->
   </div>
 
   <!-- Edit Employee Modal -->
