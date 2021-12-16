@@ -101,13 +101,13 @@ table.table td:last-child i {
     font-size: 22px;
     margin: 0 5px;
 }
-/* table.table td a {
+table.table td a {
     font-weight: bold;
     color: #566787;
     display: inline-block;
     text-decoration: none;
     outline: none !important;
-} */
+}
 table.table td a:hover {
     color: #2196F3;
 }
@@ -242,6 +242,14 @@ td:nth-of-type(1) {
 		top: -9999px;
 		left: -9999px;
 	}
+
+  th:nth-of-type(1) {
+    display: none;
+  }
+  
+  td:nth-of-type(1) {
+    display: none;
+  }
  
 	 tr { 
      margin: 0 0 1rem 0;
