@@ -170,6 +170,7 @@ $(document).ready(function () {
       },
       success: function(result){
         console.log(result);
+        $('#editEmployeeModal').modal('hide');
       },
       error:function(jqXHR){
         console.log(jqXHR);
@@ -179,6 +180,11 @@ $(document).ready(function () {
 
   // Add employee
   $("#addEmployeeSubmit").click(function(){
+    console.log($('#addFirstName').val());
+    console.log($("#addLastName").val());
+    console.log($("#addJobTitle").val());
+    console.log($("#addEmail").val());
+    console.log($("#addDepartment").val());
     $.ajax({
       url:"libs/php/insertEmployee.php",
       type: "POST",
@@ -187,11 +193,12 @@ $(document).ready(function () {
               firstName:$('#addFirstName').val(),
               lastName:$('#addLastName').val(),
               jobTitle:$('#addJobTitle').val(),
-              email:$('#addEmail').val(),
+              email:$('#addEmail').val(),              
               deptId:$("#addDepartment").val()
       },
       success: function(result){
         console.log(result);
+        $('#addEmployeeModal').modal('hide');
         Toast.fire({
           icon: 'success',
           title: 'Successfully added an employee'
@@ -249,8 +256,10 @@ function getId(id) {
             'Deleted!',
             'Your file has been deleted.',
             'success'
-          )
+          )   
+          table.ajax.reload(null, false);       
         }
+        
       });
 
     }
