@@ -192,6 +192,10 @@ $(document).ready(function () {
       },
       success: function(result){
         console.log(result);
+        Toast.fire({
+          icon: 'success',
+          title: 'Successfully added an employee'
+        })
       },
       error:function(jqXHR){
         console.log(jqXHR);
