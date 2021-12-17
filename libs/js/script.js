@@ -7,15 +7,13 @@ $(document).ready(function () {
   let editId;
 
   // Searchbar
-  $('.test').DataTable();
-  $('[data-toggle="tooltip"]').tooltip();
+  // $('.test').DataTable();
+  // $('[data-toggle="tooltip"]').tooltip();
+  getAll();
+  getLocations();
+  getDepartments();
   
-//   $('#personnelTable').DataTable({
-  
-//     // Enable the searching
-//     // of the DataTable
-//     searching: true
-// });
+  function getAll() {
   $.ajax({
     url: "libs/php/getAll.php",
     type: 'GET',
@@ -39,9 +37,8 @@ $(document).ready(function () {
       $('a[data-bs-target="#editEmployeeModal"]').click(function() {
  
         editId = $(this).closest('tr').data('personnel-id');
- 
         // console.log(editId);
- 
+
         // Edit new employee modal -- department field populated
           $.ajax({
             url: "libs/php/getPersonnelByID.php",
@@ -51,10 +48,10 @@ $(document).ready(function () {
             },
             success: function (result) {
               console.log(result);
-              let departmentID = result.data.personnel[0]['departmentID'];
+              // let departmentID = result.data.personnel[0]['departmentID'];
               // console.log(result);
               // console.log(result.data.personnel[0]['firstName']);
-              console.log(result.data.personnel[0]['departmentID']);
+              // console.log(result.data.personnel[0]['departmentID']);
               $('#idEdit').attr("value", result.data.personnel[0]['id']);
               $('#firstNameEdit').attr("value", result.data.personnel[0]['firstName']);
               $('#lastNameEdit').attr("value", result.data.personnel[0]['lastName']);
@@ -75,7 +72,8 @@ $(document).ready(function () {
       console.log(jqXHR);
     }
   })
-
+}
+function getLocations() {
   $.ajax({
     url: "libs/php/getAllLocations.php",
     type: 'GET',
@@ -90,7 +88,7 @@ $(document).ready(function () {
                   <a href='#deleteEmployeeModal' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
                   $('#location').append($("<option />").val(value.id).text(value.name));
-                  $('#editDepartLocation').append($("<option />").val(value.id).text(value.name));
+                  $('#locationDept').append($("<option />").val(value.id).text(value.name));
       })
       $('#locationData').html(locData);
       
@@ -99,7 +97,9 @@ $(document).ready(function () {
       console.log(jqXHR);
     }
   })
+}
 
+function getDepartments() {
   $.ajax({
     url: "libs/php/getAllDepartments.php",
     type: 'GET',
@@ -126,34 +126,7 @@ $(document).ready(function () {
       console.log(jqXHR);
     }
   })
-  
-
-  // Add new employee modal -- department field populated
-  // $.ajax({
-  //   url: "libs/php/getAllDepartments.php",
-  //   type: 'GET',
-  //   success: function (result) {
-  //     $.each(result.data, function (index, value) {
-  //       // console.log(value.id)
-
-  //       $('#department').append($("<option />").val(value.id).text(value.name));
-  //     })
-  //   },
-  // })
-  // Add new employee modal -- location field populated
-  // $.ajax({
-  //   url: "libs/php/getAllLocations.php",
-  //   type: 'GET',
-  //   success: function (result) {
-  //     $.each(result.data, function (index, value) {
-  //       // console.log(value.id)
-  //       $('#location').append($("<option />").val(value.id).text(value.name));
-  //       $('#editDepartLocation').append($("<option />").val(value.id).text(value.name));
-
-  //     })
-  //   },
-  // })
-
+}
   // Edit Employee
   $("#editEmployeeSubmit").click(function(){
     $.ajax({
@@ -171,20 +144,26 @@ $(document).ready(function () {
       success: function(result){
         console.log(result);
         $('#editEmployeeModal').modal('hide');
+        Toast.fire({
+          icon: 'success',
+          title: 'Successfully edited an employee'
+        })
+        
       },
       error:function(jqXHR){
         console.log(jqXHR);
       }
     });
+    getAll();   
   });
 
   // Add employee
   $("#addEmployeeSubmit").click(function(){
-    console.log($('#addFirstName').val());
-    console.log($("#addLastName").val());
-    console.log($("#addJobTitle").val());
-    console.log($("#addEmail").val());
-    console.log($("#addDepartment").val());
+    // console.log($('#addFirstName').val());
+    // console.log($("#addLastName").val());
+    // console.log($("#addJobTitle").val());
+    // console.log($("#addEmail").val());
+    // console.log($("#addDepartment").val());
     $.ajax({
       url:"libs/php/insertEmployee.php",
       type: "POST",
@@ -203,35 +182,13 @@ $(document).ready(function () {
           icon: 'success',
           title: 'Successfully added an employee'
         })
+        getAll();
       },
       error:function(jqXHR){
         console.log(jqXHR);
       }
     });
   });
-
-  // $("#addNewEmployee").submit(function (e) {
-  //   e.preventDefault();
-  
-  //   var form = $(this);
-  //   var url = form.attr('action');
-  //   // console.log(form)
-  //   $.ajax({
-  //     type: "POST",
-  //     url: url,
-  //     data: form.serialize(), // serializes the form's elements.
-  //     success: function (data) {
-  //       $('#addEmployeeModal').modal('hide');
-  //       Toast.fire({
-  //         icon: 'success',
-  //         title: 'Successfully added an employee'
-  //       })
-  //     }
-  //   });
-  
-  
-  // });
-
 
 })
 
@@ -257,57 +214,12 @@ function getId(id) {
             'Your file has been deleted.',
             'success'
           )   
-          table.ajax.reload(null, false);       
-        }
-        
+          getAll();       
+        }        
       });
-
     }
   })
 }
-
-
-// $('#employeeDeleteBtn').click(function (event) {
-//   alert(id)
-//   $.ajax({
-//     type: "POST",
-//     url: "libs/php/deleteEmployee.php",
-//     data: { 'id': id },
-//     success: function (data) {
-//       console.log(data)
-//       Toast.fire({
-//         icon: 'success',
-//         title: 'Great Success'
-//       })
-//     }
-//   });
-// })
-
-
-
-// Handle employee add form with Ajax
-// Still need to add a proper response when added successfully. Check out sweet alerts or if Bootstrap's toasts work
-$("#addNewEmployee").submit(function (e) {
-  e.preventDefault();
-
-  var form = $(this);
-  var url = form.attr('action');
-  // console.log(form)
-  $.ajax({
-    type: "POST",
-    url: url,
-    data: form.serialize(), // serializes the form's elements.
-    success: function (data) {
-      $('#addEmployeeModal').modal('hide');
-      Toast.fire({
-        icon: 'success',
-        title: 'Successfully added an employee'
-      })
-    }
-  });
-
-
-});
 
 // Sweetalert toast initialize
 const Toast = Swal.mixin({
@@ -320,15 +232,7 @@ const Toast = Swal.mixin({
     toast.addEventListener('mouseenter', Swal.stopTimer)
     toast.addEventListener('mouseleave', Swal.resumeTimer)
   }
-})
+});
 
-
-    // $.ajax({
-    //   url: "libs/php/deleteEmployee.php",
-    //   type: 'GET',
-    //   success: function (result) {
-    //    console.log(result)
-    //   },
-    // })
 
     
