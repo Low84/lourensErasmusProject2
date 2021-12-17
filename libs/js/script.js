@@ -9,9 +9,21 @@ $(document).ready(function () {
   // Searchbar
   // $('.test').DataTable();
   // $('[data-toggle="tooltip"]').tooltip();
+
+  var myModal = new bootstrap.Modal(document.getElementById('editEmployeeModal'), {
+    keyboard: false,
+  });
+  var myModalAdd = new bootstrap.Modal(document.getElementById('addEmployeeModal'), {
+    keyboard: false,
+  });
+  var myModalDelete = new bootstrap.Modal(document.getElementById('deleteEmployeeModal'), {
+    keyboard: false,
+  });
+
   getAll();
   getLocations();
   getDepartments();
+  locationById();
   
   function getAll() {
   $.ajax({
@@ -19,6 +31,7 @@ $(document).ready(function () {
     type: 'GET',
     success: function (result) {
       // console.log(result)
+      data = null;
       $.each(result.data, function (index, value) {
         data += "<tr data-personnel-id='" + value.id + "'><td data-title='id'>" + value.id + "</td><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
         // console.log(value.location);
@@ -26,11 +39,8 @@ $(document).ready(function () {
                   <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' onclick='getId(" + value.id + ")' data-bs-toggle='modal'><i class='far fa-trash-alt'\
-                  data-toggle='tooltip' title='Delete'></i></a></td></tr>";
-
-                  
+                  data-toggle='tooltip' title='Delete'></i></a></td></tr>";                  
       })
-
       
       $('#user_data').html(data);
 
@@ -73,15 +83,16 @@ $(document).ready(function () {
     }
   })
 }
+
 function getLocations() {
   $.ajax({
     url: "libs/php/getAllLocations.php",
     type: 'GET',
     success: function (result) {
-      // console.log(result);
+      console.log(result);
       $.each(result.data, function (index, value) {
-        // console.log(value.name);
-        locData += '<tr><td data-title="ID">' + value.id + '</td><td data-title="Location">' + value.name + '</td><td>NoD</td><td>' + 'NoP' + '</td>';
+        console.log(value.id);
+        locData += '<tr><td id="locationID" data-title="ID">' + value.id + '</td><td data-title="Location">' + value.name + '</td><td>NoD</td><td>' + 'NoP' + '</td>';
         locData += "\
                   <td data-title='Edit/Delete'><a href='#editLocationModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
@@ -99,6 +110,37 @@ function getLocations() {
   })
 }
 
+function locationById(data) {
+  $.ajax({
+  url: "libs/php/getLocationByID.php",
+  type: 'GET',
+  data: {
+    id: data
+  },
+  success: function (result) {
+    console.log(result);
+    $.each(result.data, function (index, value) {
+      console.log(value.name);
+      $('deptLocation').html(value.name)
+      // locData += '<tr><td id="locationID" data-title="ID">' + value.id + '</td><td data-title="Location">' + value.name + '</td><td>NoD</td><td>' + 'NoP' + '</td>';
+      // locData += "\
+      //           <td data-title='Edit/Delete'><a href='#editLocationModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
+      //           data-toggle='tooltip' title='Edit'></i></a>\
+      //           <a href='#deleteEmployeeModal' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
+      //           data-toggle='tooltip' title='Delete'></i></a></td></tr>";
+      //           $('#location').append($("<option />").val(value.id).text(value.name));
+      //           $('#locationDept').append($("<option />").val(value.id).text(value.name));
+    })
+    // $('#locationData').html(locData);
+    
+  },
+  error: function (jqXHR) {
+    console.log(jqXHR);
+  }
+})
+}
+
+
 function getDepartments() {
   $.ajax({
     url: "libs/php/getAllDepartments.php",
@@ -107,18 +149,15 @@ function getDepartments() {
       console.log(result);
       $.each(result.data, function (index, value) {
         // console.log(value.id);
-        // console.log(value.location);
-
-        deptData += '<tr><td data-title="ID">' + value.id + '</td><td data-title="Department">' + value.name + '</td><td data-title="Depart. Location">' + value.location + '</td><td data-title="No Of Depts">' + value.count + "</td>";
+        console.log(value.locationID);
+        deptData += '<tr><td data-title="ID">' + value.id + '</td><td data-title="Department">' + value.name + '</td><td id="deptLocation "data-title="Depart. Location">' + locationById() +'</td><td data-title="No Of Depts">' + value.count + "</td>";
         deptData += "\
                   <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal' data-bs-target='#editDepartModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
                   $('#addDepartment').append(`<option value="${value.id}">${value.name}</option>`);
-                  $('#departmentEdit').append(`<option value="${value.id}">${value.name}</option>`);
-                  
-
+                  $('#departmentEdit').append(`<option value="${value.id}">${value.name}</option>`);                  
       })
       $('#departData').html(deptData);
     },
@@ -143,18 +182,23 @@ function getDepartments() {
       },
       success: function(result){
         console.log(result);
-        $('#editEmployeeModal').modal('hide');
-        Toast.fire({
-          icon: 'success',
-          title: 'Successfully edited an employee'
-        })
-        
+        // $('#editEmployeeModal').modal('hide');
+        // Toast.fire({
+        //   icon: 'success',
+        //   title: 'Successfully edited an employee'
+        // })       
+        // getAll();  
+        $("#user_data").html('');
+        getAll(1.5);
+        myModal.toggle()
+
       },
       error:function(jqXHR){
         console.log(jqXHR);
       }
+      
     });
-    getAll();   
+    
   });
 
   // Add employee
@@ -177,19 +221,21 @@ function getDepartments() {
       },
       success: function(result){
         console.log(result);
-        $('#addEmployeeModal').modal('hide');
-        Toast.fire({
-          icon: 'success',
-          title: 'Successfully added an employee'
-        })
-        getAll();
+        // $('#addEmployeeModal').modal('hide');
+        // Toast.fire({
+        //   icon: 'success',
+        //   title: 'Successfully added an employee'
+        // })
+        // getAll();
+        $("#user_data").html('');
+        getAll(1.5);
+        myModalAdd.toggle()
       },
       error:function(jqXHR){
         console.log(jqXHR);
       }
     });
   });
-
 })
 
 function getId(id) {
@@ -208,13 +254,15 @@ function getId(id) {
         url: "libs/php/deleteEmployee.php",
         data: { 'id': id },
         success: function (data) {
-          // console.log(data)
-          Swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-          )   
-          getAll();       
+          console.log(data)
+          // Swal.fire(
+          //   'Deleted!',
+          //   'Your file has been deleted.',
+          //   'success'
+          // )   
+          $("#user_data").html('');
+          getAll(1.5);
+          myModalDelete.toggle()    
         }        
       });
     }
