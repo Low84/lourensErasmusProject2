@@ -127,8 +127,8 @@ table.table .avatar {
 }
 
 /* Searchbar */
-/* input[type=text] {
-  float: right;
+input[type=text] {
+
   
   padding: 6px;
   border: 1px solid black;
@@ -138,11 +138,12 @@ table.table .avatar {
   font-size: 17px;
 } */
 
-/* #searchBtn {
+#searchBtn {
+
   padding: 2px 6px;
   border-radius: 3px;
   background-color: rgb(192, 191, 191);
-} */
+}
 
 /*.pagination {
     float: right;
@@ -242,14 +243,6 @@ td:nth-of-type(1) {
 		top: -9999px;
 		left: -9999px;
 	}
-
-  th:nth-of-type(1) {
-    display: none;
-  }
-  
-  td:nth-of-type(1) {
-    display: none;
-  }
  
 	 tr { 
      margin: 0 0 1rem 0;
