@@ -33,14 +33,17 @@ $(document).ready(function () {
       // console.log(result)
       data = null;
       $.each(result.data, function (index, value) {
-        data += "<tr data-personnel-id='" + value.id + "'><td data-title='id'>" + value.id + "</td><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
         // console.log(value.location);
+
+        data += "<tr data-personnel-id='" + value.id + "'><td data-title='id'>" + value.id + "</td><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
         data += "\
                   <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
-                  <a href='#' class='delete' onclick='getId(" + value.id + ")' data-bs-toggle='modal'><i class='far fa-trash-alt'\
+                  <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";                  
       })
+
+      
       
       $('#user_data').html(data);
 
@@ -100,6 +103,9 @@ function getLocations() {
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
                   $('#location').append($("<option />").val(value.id).text(value.name));
                   $('#locationDept').append($("<option />").val(value.id).text(value.name));
+                  $('#addDepartmentLoc').append(`<option value="${value.id}">${value.name}</option>`);
+
+
       })
       $('#locationData').html(locData);
       
@@ -120,7 +126,8 @@ function locationById(data) {
   success: function (result) {
     console.log(result);
     $.each(result.data, function (index, value) {
-      console.log(value.name);
+      console.log(value);
+
       $('deptLocation').html(value.name)
       // locData += '<tr><td id="locationID" data-title="ID">' + value.id + '</td><td data-title="Location">' + value.name + '</td><td>NoD</td><td>' + 'NoP' + '</td>';
       // locData += "\
@@ -150,12 +157,15 @@ function getDepartments() {
       $.each(result.data, function (index, value) {
         // console.log(value.id);
         console.log(value.locationID);
-        deptData += '<tr><td data-title="ID">' + value.id + '</td><td data-title="Department">' + value.name + '</td><td id="deptLocation "data-title="Depart. Location">' + locationById() +'</td><td data-title="No Of Depts">' + value.count + "</td>";
+        deptData += `<tr><td data-title="ID">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Depart. Location">${locationById(value.locationID)}</td><td data-title="No Of Depts">${value.count}</td>`;        
         deptData += "\
                   <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal' data-bs-target='#editDepartModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
+                  
+                  $('#addNewDepartment').append(`<option value="${value.id}">${value.name}</option>`);
+
                   $('#addDepartment').append(`<option value="${value.id}">${value.name}</option>`);
                   $('#departmentEdit').append(`<option value="${value.id}">${value.name}</option>`);                  
       })
@@ -166,6 +176,7 @@ function getDepartments() {
     }
   })
 }
+
   // Edit Employee
   $("#editEmployeeSubmit").click(function(){
     $.ajax({
@@ -182,14 +193,14 @@ function getDepartments() {
       },
       success: function(result){
         console.log(result);
-        // $('#editEmployeeModal').modal('hide');
-        // Toast.fire({
-        //   icon: 'success',
-        //   title: 'Successfully edited an employee'
-        // })       
-        // getAll();  
+
+        Toast.fire({
+          icon: 'success',
+          title: 'Successfully edited an employee'
+        })       
+ 
         $("#user_data").html('');
-        getAll(1.5);
+        getAll();
         myModal.toggle()
 
       },
@@ -204,10 +215,6 @@ function getDepartments() {
   // Add employee
   $("#addEmployeeSubmit").click(function(){
     // console.log($('#addFirstName').val());
-    // console.log($("#addLastName").val());
-    // console.log($("#addJobTitle").val());
-    // console.log($("#addEmail").val());
-    // console.log($("#addDepartment").val());
     $.ajax({
       url:"libs/php/insertEmployee.php",
       type: "POST",
@@ -221,14 +228,15 @@ function getDepartments() {
       },
       success: function(result){
         console.log(result);
-        // $('#addEmployeeModal').modal('hide');
-        // Toast.fire({
-        //   icon: 'success',
-        //   title: 'Successfully added an employee'
-        // })
-        // getAll();
+
+        Toast.fire({
+          icon: 'success',
+          title: 'Successfully added an employee'
+        })
+
         $("#user_data").html('');
-        getAll(1.5);
+        getAll();
+     
         myModalAdd.toggle()
       },
       error:function(jqXHR){
@@ -236,38 +244,109 @@ function getDepartments() {
       }
     });
   });
+
+  $("#addDepartmentSubmit").click(function(){
+    // console.log($('#addFirstName').val());
+    $.ajax({
+      url:"libs/php/insertEmployee.php",
+      type: "POST",
+      dataType: "JSON",
+      data:{
+              firstName:$('#addFirstName').val(),
+              lastName:$('#addLastName').val(),
+              jobTitle:$('#addJobTitle').val(),
+              email:$('#addEmail').val(),              
+              deptId:$("#addDepartment").val()
+      },
+      success: function(result){
+        console.log(result);
+
+        Toast.fire({
+          icon: 'success',
+          title: 'Successfully added an employee'
+        })
+
+        $("#user_data").html('');
+        getAll();
+     
+        myModalAdd.toggle()
+      },
+      error:function(jqXHR){
+        console.log(jqXHR);
+      }
+    });
+  });
+
+  $(".delete").click(function(){
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: "POST",
+          url: "libs/php/deleteEmployee.php",
+          data: { 'id': id },
+          success: function (data) {
+            console.log(data)
+            // Swal.fire(
+            //   'Deleted!',
+            //   'Your file has been deleted.',
+            //   'success'
+            // )   
+            //$("#user_data").html('');
+            getAll(1.5);
+            myModalDelete.toggle();   
+          },
+          error: function(jqXHR){
+            console.log(jqXHR);
+          }      
+        });
+      }
+    })
+  
+});
+
 })
 
-function getId(id) {
-  Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.ajax({
-        type: "POST",
-        url: "libs/php/deleteEmployee.php",
-        data: { 'id': id },
-        success: function (data) {
-          console.log(data)
-          // Swal.fire(
-          //   'Deleted!',
-          //   'Your file has been deleted.',
-          //   'success'
-          // )   
-          $("#user_data").html('');
-          getAll(1.5);
-          myModalDelete.toggle()    
-        }        
-      });
-    }
-  })
-}
+
+// function getId(id) {
+//   Swal.fire({
+//     title: 'Are you sure?',
+//     text: "You won't be able to revert this!",
+//     icon: 'warning',
+//     showCancelButton: true,
+//     confirmButtonColor: '#3085d6',
+//     cancelButtonColor: '#d33',
+//     confirmButtonText: 'Yes, delete it!'
+//   }).then((result) => {
+//     if (result.isConfirmed) {
+//       console.log(result)
+//       $.ajax({
+//         type: "POST",
+//         url: "libs/php/deleteEmployee.php",
+//         data: { 'id': id },
+//         success: function (data) {
+//           console.log(data)
+//           Swal.fire(
+//             'Deleted!',
+//             'Your file has been deleted.',
+//             'success'
+//           )   
+//           $("#user_data").html('');
+//           getAll();
+  
+//           myModalDelete.toggle()    
+//         }        
+//       });
+//     }
+//   })
+// }
 
 // Sweetalert toast initialize
 const Toast = Swal.mixin({
