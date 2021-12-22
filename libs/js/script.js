@@ -41,7 +41,9 @@ $(document).ready(function () {
                   <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete'><i class='far fa-trash-alt'\
-                  data-toggle='tooltip' title='Delete'></i></a></td></tr>";                  
+                  data-toggle='tooltip' title='Delete'></i></a></td></tr>";     
+                  
+                  
       })
       
       $('#user_data').html(data);
@@ -65,12 +67,11 @@ $(document).ready(function () {
                 data: { 'id': $(this).closest('tr').data('personnel-id') },
                 success: function (data) {
                   console.log(data);
-                  // Swal.fire(
-                  //   'Deleted!',
-                  //   'Your file has been deleted.',
-                  //   'success'
-                  // )   
-                  //$("#user_data").html('');
+                  Swal.fire(
+                    'Deleted!',
+                    'The personnel file has been deleted.',
+                    'success'
+                  )   
                   getAll(1.5);
                   //myModalDelete.toggle();   
                 },
@@ -149,25 +150,40 @@ function getLocations() {
   })
 }
  
-function locationById(data) {
-  $.ajax({
-    url: "libs/php/getLocationByID.php",
-    type: 'GET',
-    data: {
-      id: data
-    },
-    success: function (result) {
-      console.log(result);
-      $.each(result.data, function (index, value) {
-        console.log(value.name);
-        $('#deptLocation').html(value.name);
-      })    
-    },
-    error: function (jqXHR) {
-      console.log(jqXHR);
-    }
-  })
+// function locationById(data) {
+//   $.ajax({
+//     url: "libs/php/getLocationByID.php",
+//     type: 'GET',
+//     data: {
+//       id: data
+//     },
+//     success: function (result) {
+  
+//       console.log(result);
+//       return result;
+//       // $.each(result.data, function (index, value) {
+//       //   console.log(value.name);
+//       //   $('#deptLocation').html(value.name);
+//       // })    
+//     },
+//     error: function (jqXHR) {
+//       console.log(jqXHR);
+//     }
+//   })
+// }
+
+async function locationById(data) {
+  const result = await $.ajax({
+  url: "libs/php/getLocationByID.php",
+  type: 'GET',
+  data: {
+    id: data
+  }
+});
+console.log(result);
+return result;
 }
+
 
 function getDepartments() {
   $.ajax({
@@ -177,19 +193,24 @@ function getDepartments() {
       console.log(result);
       $.each(result.data, function (index, value) {
         // console.log(value.id);
-        console.log(value.locationID);
-        locationById(value.locationID);
-        countPersonnel(value.id);
-        deptData += `<tr><td data-title="ID" id="departmentTableId">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Depart. Location"></td><td id="numPersonnel" data-title="No Of Depts"></td>`;
+        // console.log(value.locationID);
+        locationById(value.locationId).then(function(data){console.log(data)});
+        var locationName;
+        locationById(value.locationId).then(function(data){locationName = data["data"][0]["name"]});
+
+        
+        deptData += `<tr><td data-title="ID" id="departmentTableId" data-department-id="${value.id}">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Depts. Location"></td><td id="numPersonnel" data-title="No Of Depts"></td>`;
         deptData += "\
                   <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal' data-bs-target='#editDepartModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
-                  $('#addDepartment').append(`<option value="${value.id}">${value.name}</option>`);                  
-                  $('#departmentEdit').append(`<option value="${value.id}">${value.name}</option>`);
                   
-                    
+                  $('#addNewDepartment').append(`<option value="${value.id}">${value.name}</option>`);                  
+
+                  $('#addDepartment').append(`<option value="${value.id}">${value.name}</option>`);                  
+                  $('#departmentEdit').append(`<option value="${value.id}">${value.name}</option>`);    
+                  
                   
                                
       })
@@ -201,27 +222,51 @@ function getDepartments() {
   })
 }
 
-function countPersonnel(data) {
-  $.ajax({
-    url: "libs/php/countDepartments.php",
-    type: 'GET',
-    data: {
-      deptId: data
-    },
-    success: function (result) {
-      console.log(result);
-      // $.each(result.data, function (index, value) {
-      //   console.log(value.count);
+// function countPersonnel() {
 
-      //   $('#numPersonnel').html(value.count);
+//   let deptId = $(this).closest('tr').data('department-id');
+
+//   $.ajax({
+//     url: "libs/php/countPersonnel.php",
+//     type: 'GET',
+//     data: {
+//       deptId: deptId
+//     },
+//     success: function (result) {
+//       console.log(result);
+//       // $.each(result.data, function (index, value) {
+//       //   console.log(value.count);
+
+//       //   $('#numPersonnel').html(value.count);
                 
-      // })
-    },
-    error: function (jqXHR) {
-      console.log(jqXHR);
-    }
-  })  
-}
+//       // })
+//     },
+//     error: function (jqXHR) {
+//       console.log(jqXHR);
+//     }
+//   })  
+// }
+
+// function countLocations() {
+//   $.ajax({
+//     url: "libs/php/countLocation.php",
+//     type: 'GET',
+//     data: {
+//       locationId: value.locationID
+//     },
+//     success: function (result) {
+  
+//       console.log(result);
+//       // $.each(result.data, function (index, value) {
+//       //   console.log(value.name);
+//       //   $('#deptLocation').html(value.name);
+//       // })    
+//     },
+//     error: function (jqXHR) {
+//       console.log(jqXHR);
+//     }
+//   })
+// }
 
   // Edit Employee
   $("#editEmployeeSubmit").click(function(){
@@ -240,10 +285,10 @@ function countPersonnel(data) {
       success: function(result){
         console.log(result);
         // $('#editEmployeeModal').modal('hide');
-        // Toast.fire({
-        //   icon: 'success',
-        //   title: 'Successfully edited an employee'
-        // })       
+        Toast.fire({
+          icon: 'success',
+          title: 'Successfully edited an employee'
+        })       
         // getAll();  
         $("#user_data").html('');
         getAll(1.5);
@@ -279,10 +324,10 @@ function countPersonnel(data) {
       success: function(result){
         console.log(result);
         // $('#addEmployeeModal').modal('hide');
-        // Toast.fire({
-        //   icon: 'success',
-        //   title: 'Successfully added an employee'
-        // })
+        Toast.fire({
+          icon: 'success',
+          title: 'Successfully added an employee'
+        })
         // getAll();
         $("#user_data").html('');
         getAll(1.5);
