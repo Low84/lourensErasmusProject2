@@ -38,7 +38,7 @@ $(document).ready(function () {
     url: "libs/php/getAll.php",
     type: 'GET',
     success: function (result) {
-      // console.log(result)
+      console.log(result)
       data = null;
       $.each(result.data, function (index, value) {
         data += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
@@ -167,6 +167,7 @@ function getDepartments() {
     url: "libs/php/getAllDepartments.php",
     type: 'GET',
     success: function (result) {
+      deptData = null;
       console.log(result);
       $.each(result.data, function (index, value) {
         // console.log(value.id);
@@ -176,7 +177,7 @@ function getDepartments() {
         deptData += "\
                   <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal' data-bs-target='#editDepartModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
-                  <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
+                  <a href='#' class='delete deleteDepartment' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";                
                   
                   $('#addNewDepartment').append(`<option value="${value.id}">${value.name}</option>`); 
@@ -187,6 +188,64 @@ function getDepartments() {
                                
       })
       $('#departData').html(deptData);
+
+      $(".deleteDepartment").click(function(){
+        console.log('delete');
+        console.log($(this).closest('tr').data('department-id'));
+        $.ajax({
+          url:"libs/php/countEmployees.php",
+          type: "POST",
+          dataType: "JSON",
+          data:{
+            deptId: $(this).closest('tr').data('department-id')
+          },
+          success: function(result){
+            console.log(result);
+            // if(result) {
+
+            // } else {
+
+            // }
+     
+          },
+          error:function(jqXHR){
+            console.log(jqXHR);
+          }
+          
+        });
+
+          // Swal.fire({
+          //   title: 'Are you sure?',
+          //   text: "You won't be able to revert this!",
+          //   icon: 'warning',
+          //   showCancelButton: true,
+          //   confirmButtonColor: '#3085d6',
+          //   cancelButtonColor: '#d33',
+          //   confirmButtonText: 'Yes, delete it!'
+          // }).then((result) => {
+          //   if (result.isConfirmed) {
+          //     $.ajax({
+          //       type: "POST",
+          //       url: "libs/php/deleteEmployee.php",
+          //       data: { 'id': $(this).closest('tr').data('personnel-id') },
+          //       success: function (data) {
+          //         console.log(data);
+          //         Swal.fire(
+          //           'Deleted!',
+          //           'The personnel file has been deleted.',
+          //           'success'
+          //         )   
+          //         getAll(1.5);
+          //         //myModalDelete.toggle();   
+          //       },
+          //       error: function(jqXHR){
+          //         console.log(jqXHR);
+          //       }      
+          //     });
+          //   }
+          // })
+        
+      });
 
       $('a[data-bs-target="#editDepartModal"]').click(function() {
  
@@ -223,7 +282,6 @@ function getDepartments() {
     }
   })
 }
-
 
   // Edit Employee
   $("#editEmployeeSubmit").click(function(){
