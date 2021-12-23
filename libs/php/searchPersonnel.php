@@ -38,7 +38,7 @@
 	$query = $conn->prepare('SELECT (*) FROM personnel WHERE firstName LIKE "?" OR lastName = "?"');
   // SELECT * FROM personnel
   // WHERE firstName LIKE 'an%';
-	$query->bind_param("s", $_REQUEST['searchVal']);
+	$query->bind_param("ss", $_REQUEST['searchName'], $_REQUEST['searchLastName']);
 
 	$query->execute();
 	
