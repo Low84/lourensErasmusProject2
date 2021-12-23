@@ -172,14 +172,12 @@ function getDepartments() {
         // console.log(value.id);
         // console.log(value.locationID);
  
-        deptData += `<tr data-department-id='${value.id}'><td data-title="ID" id="departmentTableId">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Depts. Location">${value.location}</td><td id="numPersonnel" data-title="No Of Depts">${value.count}</td>`;
+        deptData += `<tr data-department-id='${value.id}'><td data-title="ID" id="departmentTableId">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Depts. Location">${value.location}</td>`;
         deptData += "\
                   <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal' data-bs-target='#editDepartModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
-                  data-toggle='tooltip' title='Delete'></i></a></td></tr>";
-                  
-
+                  data-toggle='tooltip' title='Delete'></i></a></td></tr>";                
                   
                   $('#addNewDepartment').append(`<option value="${value.id}">${value.name}</option>`); 
                   $('#addDepartment').append(`<option value="${value.id}">${value.name}</option>`);                  
@@ -331,7 +329,6 @@ function getDepartments() {
 
   // Edit Department
   $("#editDepartmentSubmit").click(function(){
-    // console.log($(`td:contains("${$('#editDepartmentName').val()}")`).closest('tr').data('department-id'));
     console.log($('#departmentId').val());
     console.log($('#editDepartmentName').val());
     console.log($('#editDepartmentLocation').val());
@@ -340,11 +337,9 @@ function getDepartments() {
       type: "POST",
       dataType: "JSON",
       data:{
-        // id: $(`td:contains("${$('#editDepartmentName').val()}")`).closest('tr').data('department-id'),
         id: $('#departmentId').val(),
         name: $('#editDepartmentName').val(),
         locationId: $('#editDepartmentLocation').val()
-   
       },
       success: function(result){
         console.log(result);
@@ -364,7 +359,7 @@ function getDepartments() {
       
     });
   });
-  
+
 });
 
 
