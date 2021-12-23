@@ -19,6 +19,9 @@ $(document).ready(function () {
   var myModalDelete = new bootstrap.Modal(document.getElementById('deleteEmployeeModal'), {
     keyboard: false,
   });
+  var myModalAddDept = new bootstrap.Modal(document.getElementById('addDepartModal'), {
+    keyboard: false,
+  });
  
   getAll();
   getLocations();
@@ -141,6 +144,9 @@ function getLocations() {
                   $('#location').append($("<option />").val(value.id).text(value.name));
                   $('#locationDept').append($("<option />").val(value.id).text(value.name));                  
                   $('#addNewLocation').append($("<option />").val(value.id).text(value.name));
+                  
+                  $('#addDepartmentLocation').append($("<option />").val(value.id).text(value.name));
+
 
       })
       $('#locationData').html(locData);
@@ -196,20 +202,15 @@ function getDepartments() {
       $.each(result.data, function (index, value) {
         // console.log(value.id);
         // console.log(value.locationID);
-        locationById(value.locationId).then(function(data){console.log(data)});
-        var locationName;
-        locationById(value.locationId).then(function(data){locationName = data["data"][0]["name"]});
-
-        
-        deptData += `<tr><td data-title="ID" id="departmentTableId" data-department-id="${value.id}">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Depts. Location"></td><td id="numPersonnel" data-title="No Of Depts"></td>`;
+ 
+        deptData += `<tr><td data-title="ID" id="departmentTableId">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Depts. Location">${value.location}</td><td id="numPersonnel" data-title="No Of Depts">${value.count}</td>`;
         deptData += "\
                   <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal' data-bs-target='#editDepartModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
                   
-                  $('#addNewDepartment').append(`<option value="${value.id}">${value.name}</option>`);                  
-
+                  $('#addNewDepartment').append(`<option value="${value.id}">${value.name}</option>`); 
                   $('#addDepartment').append(`<option value="${value.id}">${value.name}</option>`);                  
                   $('#departmentEdit').append(`<option value="${value.id}">${value.name}</option>`);    
                   
@@ -224,51 +225,6 @@ function getDepartments() {
   })
 }
 
-// function countPersonnel() {
-
-//   let deptId = $(this).closest('tr').data('department-id');
-
-//   $.ajax({
-//     url: "libs/php/countPersonnel.php",
-//     type: 'GET',
-//     data: {
-//       deptId: deptId
-//     },
-//     success: function (result) {
-//       console.log(result);
-//       // $.each(result.data, function (index, value) {
-//       //   console.log(value.count);
-
-//       //   $('#numPersonnel').html(value.count);
-                
-//       // })
-//     },
-//     error: function (jqXHR) {
-//       console.log(jqXHR);
-//     }
-//   })  
-// }
-
-// function countLocations() {
-//   $.ajax({
-//     url: "libs/php/countLocation.php",
-//     type: 'GET',
-//     data: {
-//       locationId: value.locationID
-//     },
-//     success: function (result) {
-  
-//       console.log(result);
-//       // $.each(result.data, function (index, value) {
-//       //   console.log(value.name);
-//       //   $('#deptLocation').html(value.name);
-//       // })    
-//     },
-//     error: function (jqXHR) {
-//       console.log(jqXHR);
-//     }
-//   })
-// }
 
   // Edit Employee
   $("#editEmployeeSubmit").click(function(){
@@ -340,6 +296,38 @@ function getDepartments() {
       }
     });
   });
+
+// Add Department
+  $("#addDepartmentSubmit").click(function(){
+    console.log($('#addDepartmentName').val());
+    console.log($('#addDepartmentLocation').val());
+
+    $.ajax({
+      url:"libs/php/insertDepartment.php",
+      type: "POST",
+      dataType: "JSON",
+      data:{
+              name:$('#addDepartmentName').val(),
+              locationID:$('#addDepartmentLocation').val()              
+      },
+      success: function(result){
+        console.log(result);
+        Toast.fire({
+          icon: 'success',
+          title: 'Successfully added a department'
+        })
+        // getAll();
+        $("#departData").html('');
+        getDepartments(1.5);
+        myModalAddDept.toggle();
+        
+      },
+      error:function(jqXHR){
+        console.log(jqXHR);
+      }
+    });
+  });
+
 });
 
 
