@@ -22,11 +22,14 @@ $(document).ready(function () {
   var myModalAddDept = new bootstrap.Modal(document.getElementById('addDepartModal'), {
     keyboard: false,
   });
+  var myModalEditDept = new bootstrap.Modal(document.getElementById('editDepartModal'), {
+    keyboard: false,
+  });
  
   getAll();
   getLocations();
   getDepartments();
-  locationById();
+ 
  
   
   
@@ -38,7 +41,7 @@ $(document).ready(function () {
       // console.log(result)
       data = null;
       $.each(result.data, function (index, value) {
-        data += "<tr data-personnel-id='" + value.id + "'><td data-title='id'>" + value.id + "</td><td data-title='First Name'>" + value.firstName + "</td><td data-title=Last Name'>" + value.lastName + "</td><td data-title='Location'>" + value.location + "</td><td data-title='Email'>" + value.email + "</td><td data-title='Department'>" + value.department + "</td>";
+        data += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
         // console.log(value.location);
         data += "\
                   <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
@@ -146,6 +149,7 @@ function getLocations() {
                   $('#addNewLocation').append($("<option />").val(value.id).text(value.name));
                   
                   $('#addDepartmentLocation').append($("<option />").val(value.id).text(value.name));
+                  $('#editDepartmentLocation').append($("<option />").val(value.id).text(value.name));
 
 
       })
@@ -157,41 +161,6 @@ function getLocations() {
     }
   })
 }
- 
-// function locationById(data) {
-//   $.ajax({
-//     url: "libs/php/getLocationByID.php",
-//     type: 'GET',
-//     data: {
-//       id: data
-//     },
-//     success: function (result) {
-  
-//       console.log(result);
-//       return result;
-//       // $.each(result.data, function (index, value) {
-//       //   console.log(value.name);
-//       //   $('#deptLocation').html(value.name);
-//       // })    
-//     },
-//     error: function (jqXHR) {
-//       console.log(jqXHR);
-//     }
-//   })
-// }
-
-async function locationById(data) {
-  const result = await $.ajax({
-  url: "libs/php/getLocationByID.php",
-  type: 'GET',
-  data: {
-    id: data
-  }
-});
-console.log(result);
-return result;
-}
-
 
 function getDepartments() {
   $.ajax({
@@ -203,21 +172,53 @@ function getDepartments() {
         // console.log(value.id);
         // console.log(value.locationID);
  
-        deptData += `<tr><td data-title="ID" id="departmentTableId">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Depts. Location">${value.location}</td><td id="numPersonnel" data-title="No Of Depts">${value.count}</td>`;
+        deptData += `<tr data-department-id='${value.id}'><td data-title="ID" id="departmentTableId">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Depts. Location">${value.location}</td><td id="numPersonnel" data-title="No Of Depts">${value.count}</td>`;
         deptData += "\
                   <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal' data-bs-target='#editDepartModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
                   <a href='#' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                   data-toggle='tooltip' title='Delete'></i></a></td></tr>";
                   
+
+                  
                   $('#addNewDepartment').append(`<option value="${value.id}">${value.name}</option>`); 
                   $('#addDepartment').append(`<option value="${value.id}">${value.name}</option>`);                  
                   $('#departmentEdit').append(`<option value="${value.id}">${value.name}</option>`);    
                   
-                  
+                  $('#editDepartmentName').append(`<option value="${value.id}">${value.name}</option>`);    
                                
       })
       $('#departData').html(deptData);
+
+      $('a[data-bs-target="#editDepartModal"]').click(function() {
+ 
+        editId = $(this).closest('tr').data('department-id');
+        console.log(editId);
+ 
+        // Edit new employee modal -- department field populated
+          $.ajax({
+            url: "libs/php/getDepartmentByID.php",
+            type: 'GET',
+            data: {
+              id: editId,
+            },
+            success: function (result) {
+              console.log(result);
+              console.log(result.data[0]['id']);
+              console.log(result.data[0].locationID);
+              // console.log(result.data.personnel[0]['departmentID']);
+              $('#departmentId').attr("value", result.data[0]['id']);
+              $('#editDepartmentName').attr("value", result.data[0]['name']);              
+              $("#editDepartmentLocation").val(result.data[0].locationID).change();
+              
+            },
+            error: function (jqXHR) {
+              console.log(jqXHR);
+            }
+          })
+ 
+          
+        })
     },
     error: function (jqXHR) {
       console.log(jqXHR);
@@ -289,7 +290,7 @@ function getDepartments() {
         // getAll();
         $("#user_data").html('');
         getAll(1.5);
-        myModalAdd.toggle()
+        myModalAdd.toggle();
       },
       error:function(jqXHR){
         console.log(jqXHR);
@@ -316,7 +317,7 @@ function getDepartments() {
           icon: 'success',
           title: 'Successfully added a department'
         })
-        // getAll();
+
         $("#departData").html('');
         getDepartments(1.5);
         myModalAddDept.toggle();
@@ -328,6 +329,42 @@ function getDepartments() {
     });
   });
 
+  // Edit Department
+  $("#editDepartmentSubmit").click(function(){
+    // console.log($(`td:contains("${$('#editDepartmentName').val()}")`).closest('tr').data('department-id'));
+    console.log($('#departmentId').val());
+    console.log($('#editDepartmentName').val());
+    console.log($('#editDepartmentLocation').val());
+    $.ajax({
+      url:"libs/php/editDepartment.php",
+      type: "POST",
+      dataType: "JSON",
+      data:{
+        // id: $(`td:contains("${$('#editDepartmentName').val()}")`).closest('tr').data('department-id'),
+        id: $('#departmentId').val(),
+        name: $('#editDepartmentName').val(),
+        locationId: $('#editDepartmentLocation').val()
+   
+      },
+      success: function(result){
+        console.log(result);
+        Toast.fire({
+          icon: 'success',
+          title: 'Successfully edited a department'
+        })       
+        // getAll();  
+        $("#departData").html('');
+        getDepartments(1.5);
+        myModalEditDept.toggle()
+ 
+      },
+      error:function(jqXHR){
+        console.log(jqXHR);
+      }
+      
+    });
+  });
+  
 });
 
 
