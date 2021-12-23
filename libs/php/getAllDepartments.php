@@ -33,11 +33,13 @@
     }   
  
     // SQL does not accept parameters and so is not prepared
-    $query = 'SELECT department.id, department.name, COUNT(*) as count, location.name as location
-    FROM personnel
-    INNER JOIN department ON personnel.departmentID=department.id
-    INNER JOIN location ON department.locationID=location.id
-    GROUP BY departmentID';
+    // $query = 'SELECT department.id, department.name, COUNT(*) as count, location.name as location
+    // FROM personnel
+    // INNER JOIN department ON personnel.departmentID=department.id
+    // INNER JOIN location ON department.locationID=location.id
+    // GROUP BY departmentID';
+
+    $query = 'SELECT d.id, d.name, l.name as location FROM department d LEFT JOIN location l ON (d.locationID = l.id) ORDER BY d.name, l.name';
   
  
     // $query = 'SELECT id, name, locationID FROM department';
