@@ -55,7 +55,7 @@ $(document).ready(function () {
       $('#user_data').html(data);
  
       $(".delete").click(function(){
-        console.log('delete');
+        // console.log('delete');
         console.log($(this).closest('tr').data('personnel-id'));
           Swal.fire({
             title: 'Are you sure?',
@@ -103,7 +103,7 @@ $(document).ready(function () {
               id: editId,
             },
             success: function (result) {
-              console.log(result);
+              // console.log(result);
               // let departmentID = result.data.personnel[0]['departmentID'];
               // console.log(result);
               // console.log(result.data.personnel[0]['firstName']);
@@ -131,35 +131,74 @@ $(document).ready(function () {
 }
 
 function getLocations() {
+  let locationCount;
+  let peopleCount;
   $.ajax({
     url: "libs/php/getAllLocations.php",
     type: 'GET',
     success: function (result) {
-      console.log(result);
+      // console.log(result);
       $.each(result.data, function (index, value) {
-        console.log(value.id);
-        locData += '<tr><td id="locationID" data-title="ID">' + value.id + '</td><td data-title="Location">' + value.name + '</td><td>NoD</td><td>' + 'NoP' + '</td>';
-        locData += "\
-                  <td data-title='Edit/Delete'><a href='#editLocationModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
-                  data-toggle='tooltip' title='Edit'></i></a>\
-                  <a href='#deleteEmployeeModal' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
-                  data-toggle='tooltip' title='Delete'></i></a></td></tr>";
-                  $('#location').append($("<option />").val(value.id).text(value.name));
-                  $('#locationDept').append($("<option />").val(value.id).text(value.name));                  
-                  $('#addNewLocation').append($("<option />").val(value.id).text(value.name));
-                  
-                  $('#addDepartmentLocation').append($("<option />").val(value.id).text(value.name));
-                  $('#editDepartmentLocation').append($("<option />").val(value.id).text(value.name));
 
+        $.ajax({
+          url: "libs/php/countLocationEmployees.php",
+          type: 'GET',
+          data: {
+            id: value.id
+          },
+          success: function (result) {
+            console.log(value.id)
+            console.log(result);
+            console.log(result.data[0]['people']);
+            peopleCount = 0;
+            peopleCount = result.data[0]['people'];
+                      
+            $.ajax({
+              url: "libs/php/countLocations.php",
+              type: 'GET',
+              data: {
+                id: value.id
+              },
+              success: function (result) {
+                // console.log(result);
+                console.log(peopleCount);
 
+                // console.log(result.data[0]['locationCount'])
+                locationCount = 0;
+                locationCount = result.data[0]['locationCount'];
+                // console.log(value.name);
+
+                locData += `<tr><td id="locationID" data-title="ID">${value.id}</td><td data-title="Location">${value.name}</td><td id="numDepartments" data-title="No. Depts">${locationCount}</td><td data-title="No. Employees" id="numPeople">${peopleCount}</td>`;
+                locData += "\
+                      <td data-title='Edit/Delete'><a href='#editLocationModal' class='edit' data-bs-toggle='modal'><i class='far fa-edit'\
+                      data-toggle='tooltip' title='Edit'></i></a>\
+                      <a href='#deleteEmployeeModal' class='delete' data-bs-toggle='modal'><i class='far fa-trash-alt'\
+                      data-toggle='tooltip' title='Delete'></i></a></td></tr>";
+                      $('#location').append($("<option />").val(value.id).text(value.name));
+                      $('#locationDept').append($("<option />").val(value.id).text(value.name));                  
+                      $('#addNewLocation').append($("<option />").val(value.id).text(value.name));
+                      
+                      $('#addDepartmentLocation').append($("<option />").val(value.id).text(value.name));
+                      $('#editDepartmentLocation').append($("<option />").val(value.id).text(value.name));
+
+                      $('#locationData').html(locData);
+              },
+              error: function (jqXHR) {
+                console.log(jqXHR);
+              }
+            })
+          },
+          error: function (jqXHR) {
+            console.log(jqXHR);
+          }
+        })
       })
-      $('#locationData').html(locData);
-      
     },
     error: function (jqXHR) {
       console.log(jqXHR);
     }
   })
+  
 }
 
 function getDepartments() {
@@ -168,12 +207,12 @@ function getDepartments() {
     type: 'GET',
     success: function (result) {
       deptData = null;
-      console.log(result);
+      // console.log(result);
       $.each(result.data, function (index, value) {
         // console.log(value.id);
         // console.log(value.locationID);
  
-        deptData += `<tr data-department-id='${value.id}'><td data-title="ID" id="departmentTableId">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Depts. Location">${value.location}</td>`;
+        deptData += `<tr data-department-id='${value.id}'><td data-title="ID" id="departmentTableId">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Dept. Location">${value.location}</td>`;
         deptData += "\
                   <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal' data-bs-target='#editDepartModal'><i class='far fa-edit'\
                   data-toggle='tooltip' title='Edit'></i></a>\
@@ -190,22 +229,70 @@ function getDepartments() {
       $('#departData').html(deptData);
 
       $(".deleteDepartment").click(function(){
-        console.log('delete');
-        console.log($(this).closest('tr').data('department-id'));
+        // console.log('delete');
+        // console.log($(this).closest('tr').data('department-id'));
+        let deleteId = $(this).closest('tr').data('department-id');
+        let numEmployees;
         $.ajax({
           url:"libs/php/countEmployees.php",
           type: "POST",
           dataType: "JSON",
           data:{
-            deptId: $(this).closest('tr').data('department-id')
+            // deptId: $(this).closest('tr').data('department-id')
+            deptId: deleteId
+
           },
           success: function(result){
-            console.log(result);
-            // if(result) {
+            // console.log(result);
+            // console.log(result.data[0]['count']);
+            numEmployees = 0;
+            numEmployees += result.data[0]['count'];
+            console.log(numEmployees);
+            if(numEmployees > 0) 
+            {
+              console.log("You can not delete this Department!");
+              Toast.fire({
+                icon: 'error',
+                title: 'Department has dependencies',
+                text: "You can't delete this department!"
+              }) 
+            } 
+            else {
+              // console.log("Go ahead Delete me!")
+              // console.log(result.data[0]['count']);              
+              // console.log(deleteId);
 
-            // } else {
-
-            // }
+              Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  $.ajax({
+                    type: "POST",
+                    url: "libs/php/deleteDepartmentByID.php",
+                    data: { id: deleteId },
+                    success: function (data) {
+                      console.log(data);
+                      Swal.fire(
+                        'Deleted!',
+                        'This department has been deleted.',
+                        'success'
+                      )   
+                      getDepartments(1.5);
+                      //myModalDelete.toggle();   
+                    },
+                    error: function(jqXHR){
+                      console.log(jqXHR);
+                    }      
+                  });
+                }
+              })
+            }
      
           },
           error:function(jqXHR){
@@ -214,43 +301,14 @@ function getDepartments() {
           
         });
 
-          // Swal.fire({
-          //   title: 'Are you sure?',
-          //   text: "You won't be able to revert this!",
-          //   icon: 'warning',
-          //   showCancelButton: true,
-          //   confirmButtonColor: '#3085d6',
-          //   cancelButtonColor: '#d33',
-          //   confirmButtonText: 'Yes, delete it!'
-          // }).then((result) => {
-          //   if (result.isConfirmed) {
-          //     $.ajax({
-          //       type: "POST",
-          //       url: "libs/php/deleteEmployee.php",
-          //       data: { 'id': $(this).closest('tr').data('personnel-id') },
-          //       success: function (data) {
-          //         console.log(data);
-          //         Swal.fire(
-          //           'Deleted!',
-          //           'The personnel file has been deleted.',
-          //           'success'
-          //         )   
-          //         getAll(1.5);
-          //         //myModalDelete.toggle();   
-          //       },
-          //       error: function(jqXHR){
-          //         console.log(jqXHR);
-          //       }      
-          //     });
-          //   }
-          // })
+          
         
       });
 
       $('a[data-bs-target="#editDepartModal"]').click(function() {
  
         editId = $(this).closest('tr').data('department-id');
-        console.log(editId);
+        // console.log(editId);
  
         // Edit new employee modal -- department field populated
           $.ajax({
@@ -260,9 +318,9 @@ function getDepartments() {
               id: editId,
             },
             success: function (result) {
-              console.log(result);
-              console.log(result.data[0]['id']);
-              console.log(result.data[0].locationID);
+              // console.log(result);
+              // console.log(result.data[0]['id']);
+              // console.log(result.data[0].locationID);
               // console.log(result.data.personnel[0]['departmentID']);
               $('#departmentId').attr("value", result.data[0]['id']);
               $('#editDepartmentName').attr("value", result.data[0]['name']);              
@@ -298,7 +356,7 @@ function getDepartments() {
               deptId:$("#departmentEdit").val()
       },
       success: function(result){
-        console.log(result);
+        // console.log(result);
         // $('#editEmployeeModal').modal('hide');
         Toast.fire({
           icon: 'success',
@@ -321,10 +379,6 @@ function getDepartments() {
   // Add employee
   $("#addEmployeeSubmit").click(function(){
     // console.log($('#addFirstName').val());
-    // console.log($("#addLastName").val());
-    // console.log($("#addJobTitle").val());
-    // console.log($("#addEmail").val());
-    // console.log($("#addDepartment").val());
     $.ajax({
       url:"libs/php/insertEmployee.php",
       type: "POST",
@@ -356,8 +410,8 @@ function getDepartments() {
 
 // Add Department
   $("#addDepartmentSubmit").click(function(){
-    console.log($('#addDepartmentName').val());
-    console.log($('#addDepartmentLocation').val());
+    // console.log($('#addDepartmentName').val());
+    // console.log($('#addDepartmentLocation').val());
 
     $.ajax({
       url:"libs/php/insertDepartment.php",
@@ -387,9 +441,9 @@ function getDepartments() {
 
   // Edit Department
   $("#editDepartmentSubmit").click(function(){
-    console.log($('#departmentId').val());
-    console.log($('#editDepartmentName').val());
-    console.log($('#editDepartmentLocation').val());
+    // console.log($('#departmentId').val());
+    // console.log($('#editDepartmentName').val());
+    // console.log($('#editDepartmentLocation').val());
     $.ajax({
       url:"libs/php/editDepartment.php",
       type: "POST",
@@ -424,9 +478,9 @@ function getDepartments() {
 // Sweetalert toast initialize
 const Toast = Swal.mixin({
   toast: true,
-  position: 'top-end',
+  position: 'center',
   showConfirmButton: false,
-  timer: 3000,
+  timer: 4000,
   timerProgressBar: true,
   didOpen: (toast) => {
     toast.addEventListener('mouseenter', Swal.stopTimer)
