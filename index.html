@@ -63,13 +63,30 @@
           </div>
           <div class="container"  id="searchBarDiv">
             <div class="row justify-content-start">
-              <input id="searchValue" type="text" placeholder="Search..." class="col-sm-3"   name="text">
-              <!-- <select id="searchSelect" class="col-md-auto">
-                <option value="personnel">Personnel</option>
-                <option value="location">Location</option>
-                <option value="department">Department</option>
-              </select>
-              <button type="submit" id="searchBtn" class="col-md-auto"><i class="fas fa-search"></i></button> -->
+              <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="flush-headingOne">
+                    <button class="accordion-button collapsed searchPersonnel" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                      Search Personnel...
+                    </button>
+                  </h2>
+                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                    <br class="accordion-body">
+                      <input id="searchValue" type="text" placeholder="Search..." class="col-sm-3" name="text"></br>
+                      <label class="filterLabel" for="departmentFilterSelect">Filter by Department</label></br>
+                      <select id="departmentFilterSelect" class="col-md-auto" name="departmentFilterSelect" >
+                        <option value="anyDepartment">Any Department</option>
+                      </select></br>
+                      <label class="filterLabel" for="locationFilterSelect">Filter by Location</label></br>
+                      <select id="locationFilterSelect" class="col-md-auto" name="locationFilterSelect" >
+                        <option value="anyLocation">Any Location</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              
+              
+              <!-- <button type="submit" id="searchBtn" class="col-md-auto"><i class="fas fa-search"></i></button> -->
             </div>
           </div>
           <div class=" row">
