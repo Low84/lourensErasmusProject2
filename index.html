@@ -351,21 +351,45 @@
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label for="addNewLocation">Location</label>
-              <select id="addNewLocation" class="form-control" name="locationNew">
-              </select>
+              <label>Location Name</label>
+              <input id="addLocationName" type="text" class="form-control" name="addLocationName" required>
+            </div>                        
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+            <button id="addLocationSubmit" class="btn btn-success">Add Location</button>
+          </div>
+        <!-- </form> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Location Modal -->
+  <div id="editLocationModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form >
+          <div class="modal-header">
+            <h4 class="modal-title">Edit Location</h4>
+            <a type="button" class="close" data-bs-dismiss="modal" aria-hidden="true"><i
+                class="far fa-window-close fa-2x"></i></a>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Location ID</label>
+              <input id="editLocationId" type="text" class="form-control" name="editLocationId" readonly>
             </div>
-            
-            
+            <div class="form-group">
+              <label>Location Name</label>
+              <input id="editLocationName" type="text" class="form-control" name="editLocationName" required>
+            </div>            
           </div>
           <div class="modal-footer">
             <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
             <!-- <input type="submit" class="btn btn-success" value="Add"> -->
-            <button id="addEmployeeSubmit" class="btn btn-success">Add Employee</button>
-
-            <!-- <input name="submit" type="submit" class="btn btn-success" value="Submit"> -->
+            <button id="editLocationSubmit" class="btn btn-warning">Save</button>
           </div>
-        <!-- </form> -->
+        </form>
       </div>
     </div>
   </div>
