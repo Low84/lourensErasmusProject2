@@ -55,11 +55,10 @@
 
           <div class="table-title">
             <div class="col-sm-6">
-              <h2>Manage Employees</h2>
+              <h2>Personnel</h2>
             </div>
             <div class="col-sm-6">
-              <a href="#addEmployeeModal" class="btn btn-success addEmployee" data-bs-toggle="modal"><i
-                  class="far fa-plus-square"></i> <span class="buttonText">Add New Employee</span></a>
+              <a href="#addEmployeeModal" class="btn btn-success addBtn" data-bs-toggle="modal"><i class="fas fa-user-plus"></i></a>
             </div>
           </div>
           <div id="searchBarDiv">
@@ -79,7 +78,6 @@
                 </tr>
               </thead>
               <tbody id="user_data">
-
               </tbody>
             </table>
           </div>
@@ -96,9 +94,8 @@
               <div class="col-sm-6">
                 <h2>Locations</h2>
               </div>
-              <div class="col-sm-6">
-                <a href="#addLocationModal" class="btn btn-success addEmployee" data-bs-toggle="modal"><i
-                    class="far fa-plus-square"></i> <span class="buttonText">Add New Location</span></a>
+              <div class="col-sm-6 tableTitle">
+                <a href="#addLocationModal" class="btn btn-success addEmployee" data-bs-toggle="modal"><i class="far fa-plus-square"></i></a>
               </div>
             </div>
             <div class="row">
@@ -113,7 +110,6 @@
                   </tr>
                 </thead>
                 <tbody id="locationData">
-
                 </tbody>
               </table>
             </div>
@@ -131,8 +127,7 @@
                 <h2>Departments</h2>
               </div>
               <div class="col-sm-6">
-                <a href="#addDepartModal" class="btn btn-success addEmployee" data-bs-toggle="modal"><i
-                    class="far fa-plus-square"></i> <span class="buttonText">Add New Department</span></a>
+                <a href="#addDepartModal" class="btn btn-success addEmployee" data-bs-toggle="modal"><i class="far fa-plus-square"></i></a>
               </div>
             </div>
             <div class="row">
@@ -142,12 +137,10 @@
                     <th>ID</th>
                     <th>Department</th>
                     <th>Location</th>
-                    <!-- <th>Number of Personnel</th> -->
                     <th>Edit/Delete</th>
                   </tr>
                 </thead>
                 <tbody id="departData">
-
                 </tbody>
               </table>
             </div>
@@ -163,7 +156,6 @@
   <div id="addEmployeeModal" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
-        <!-- <form action="./libs/php/insertEmployee.php" method="POST" id="addNewEmployee" class="addNewEmployee"> -->
           <div class="modal-header">
             <h4 class="modal-title">Add Employee</h4>
             <a type="button" class="close" data-bs-dismiss="modal" aria-hidden="true"><i
@@ -194,12 +186,8 @@
           </div>
           <div class="modal-footer">
             <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
-            <!-- <input type="submit" class="btn btn-success" value="Add"> -->
             <button id="addEmployeeSubmit" class="btn btn-success">Add Employee</button>
-
-            <!-- <input name="submit" type="submit" class="btn btn-success" value="Submit"> -->
           </div>
-        <!-- </form> -->
       </div>
     </div>
   </div>
@@ -239,7 +227,6 @@
               <select id="departmentEdit" class="form-control" name="departmentEdit" name="departmentID">
               </select>
             </div>
-            
           </div>
           <div class="modal-footer">
             <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
@@ -265,7 +252,6 @@
           <div class="modal-footer">
             <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
             <button id="employeeDeleteBtn" type="submit" class="btn btn-danger" value="Delete">Delete</button>
-            <!-- <input id="employeeDeleteBtn" type="submit" class="btn btn-danger" value="Delete"> -->
           </div>
         </form>
       </div>
@@ -276,7 +262,6 @@
   <div id="addDepartModal" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
-        <!-- <form action="./libs/php/insertEmployee.php" method="POST" id="addNewEmployee" class="addNewEmployee"> -->
           <div class="modal-header">
             <h4 class="modal-title">Add Department</h4>
             <a type="button" class="close" data-bs-dismiss="modal" aria-hidden="true"><i
@@ -297,9 +282,7 @@
           <div class="modal-footer">
             <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
             <button id="addDepartmentSubmit" class="btn btn-success">Add Department</button>
-
           </div>
-        <!-- </form> -->
       </div>
     </div>
   </div>
@@ -308,7 +291,6 @@
   <div id="editDepartModal" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form >
           <div class="modal-header">
             <h4 class="modal-title">Edit Department</h4>
             <a type="button" class="close" data-bs-dismiss="modal" aria-hidden="true"><i
@@ -331,10 +313,8 @@
           </div>
           <div class="modal-footer">
             <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
-            <!-- <input type="submit" class="btn btn-success" value="Add"> -->
             <button id="editDepartmentSubmit" class="btn btn-warning">Save</button>
           </div>
-        </form>
       </div>
     </div>
   </div>
@@ -343,7 +323,6 @@
   <div id="addLocationModal" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
-        <!-- <form action="./libs/php/insertEmployee.php" method="POST" id="addNewEmployee" class="addNewEmployee"> -->
           <div class="modal-header">
             <h4 class="modal-title">Add Location</h4>
             <a type="button" class="close" data-bs-dismiss="modal" aria-hidden="true"><i
@@ -359,7 +338,6 @@
             <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
             <button id="addLocationSubmit" class="btn btn-success">Add Location</button>
           </div>
-        <!-- </form> -->
       </div>
     </div>
   </div>
@@ -368,7 +346,6 @@
   <div id="editLocationModal" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form >
           <div class="modal-header">
             <h4 class="modal-title">Edit Location</h4>
             <a type="button" class="close" data-bs-dismiss="modal" aria-hidden="true"><i
@@ -386,10 +363,8 @@
           </div>
           <div class="modal-footer">
             <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
-            <!-- <input type="submit" class="btn btn-success" value="Add"> -->
             <button id="editLocationSubmit" class="btn btn-warning">Save</button>
           </div>
-        </form>
       </div>
     </div>
   </div>
