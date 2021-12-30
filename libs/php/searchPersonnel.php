@@ -35,13 +35,10 @@
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = $conn->prepare("SELECT* FROM personnel WHERE firstName LIKE ?'%' OR lastName LIKE ?'%'");
-
-  // SELECT* FROM personnel WHERE firstName LIKE 't%' OR lastName LIKE 't%';
-
-  // SELECT * FROM personnel
-  // WHERE firstName LIKE 'an%';
-  $searchTerm = $_REQUEST['value'];
+	// $query = $conn->prepare("SELECT* FROM personnel WHERE firstName LIKE ? OR lastName LIKE ?");
+  $query = $conn->prepare("SELECT p.id, p.lastName, p.firstName, p.jobTitle, p.email, d.name as department, l.name as location FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID) LEFT JOIN location l ON (l.id = d.locationID) WHERE p.firstName LIKE ? OR p.lastName LIKE ?");
+  
+  $searchTerm = $_REQUEST['value'].'%';
 	$query->bind_param("ss", $searchTerm, $searchTerm);
 
 	$query->execute();
