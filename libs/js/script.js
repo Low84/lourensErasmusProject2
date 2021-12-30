@@ -703,7 +703,7 @@ $(document).ready(function () {
 
       let value = $('#searchValue').val();
       console.log(value);
-      if (value) {
+      if ((value) && (departmentSelect === 'anyDepartment') && (locationSelect === 'anyLocation')) {
         $.ajax({
           url:"libs/php/searchPersonnel.php",
           type: "POST",
@@ -734,9 +734,111 @@ $(document).ready(function () {
             }
           
         });
-      } else {
+      } 
+      else if ((value) && (departmentSelect !== 'anyDepartment') && (locationSelect === 'anyLocation')) {
+        $.ajax({
+          url:"libs/php/searchDepartmentFilter.php",
+          type: "POST",
+          dataType: "JSON",
+          data:{
+            value: value,
+            id: departmentSelect
+          },
+            success: function(result){
+              $("#user_data").html('');
+              console.log(result);
+              searchData = 0;
+              $.each(result.data, function (index, value) {
+                searchData += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
+                // console.log(value.location);
+                searchData += "\
+                          <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
+                          data-toggle='tooltip' title='Edit'></i></a>\
+                          <a href='#' class='delete'><i class='far fa-trash-alt'\
+                          data-toggle='tooltip' title='Delete'></i></a></td></tr>";     
+                                              
+              });
+            
+              $('#user_data').html(searchData);
+      
+            },
+            error:function(jqXHR){
+              console.log(jqXHR);
+            }
+          
+        });
+      } 
+      else if ((value) && (departmentSelect === 'anyDepartment') && (locationSelect !== 'anyLocation')) {
+        $.ajax({
+          url:"libs/php/searchLocationFilter.php",
+          type: "POST",
+          dataType: "JSON",
+          data:{
+            value: value,
+            id: locationSelect
+          },
+            success: function(result){
+              $("#user_data").html('');
+              console.log(result);
+              searchData = 0;
+              $.each(result.data, function (index, value) {
+                searchData += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
+                // console.log(value.location);
+                searchData += "\
+                          <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
+                          data-toggle='tooltip' title='Edit'></i></a>\
+                          <a href='#' class='delete'><i class='far fa-trash-alt'\
+                          data-toggle='tooltip' title='Delete'></i></a></td></tr>";     
+                                              
+              });
+            
+              $('#user_data').html(searchData);
+      
+            },
+            error:function(jqXHR){
+              console.log(jqXHR);
+            }
+          
+        });
+      }
+      else if ((value) && (departmentSelect !== 'anyDepartment') && (locationSelect !== 'anyLocation')) {
+        $.ajax({
+          url:"libs/php/searchBothFilters.php",
+          type: "POST",
+          dataType: "JSON",
+          data:{
+            value: value,
+            locationId: locationSelect,
+            departmentId: departmentSelect
+          },
+            success: function(result){
+              $("#user_data").html('');
+              console.log(result);
+              searchData = 0;
+              $.each(result.data, function (index, value) {
+                searchData += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
+                // console.log(value.location);
+                searchData += "\
+                          <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
+                          data-toggle='tooltip' title='Edit'></i></a>\
+                          <a href='#' class='delete'><i class='far fa-trash-alt'\
+                          data-toggle='tooltip' title='Delete'></i></a></td></tr>";     
+                                              
+              });
+            
+              $('#user_data').html(searchData);
+      
+            },
+            error:function(jqXHR){
+              console.log(jqXHR);
+            }
+          
+        });
+      }
+      else {
         $('#user_data').html("");
         $('#user_data').html(data);
+        
       }
     })
   }
