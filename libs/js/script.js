@@ -46,7 +46,7 @@ $(document).ready(function () {
       url: "libs/php/getAll.php",
       type: 'GET',
       success: function (result) {
-        console.log(result)
+        // console.log(result);
         data = null;
         $.each(result.data, function (index, value) {
           data += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
@@ -56,9 +56,8 @@ $(document).ready(function () {
                     data-toggle='tooltip' title='Edit'></i></a>\
                     <a href='#' class='delete'><i class='far fa-trash-alt'\
                     data-toggle='tooltip' title='Delete'></i></a></td></tr>";     
-                    
-                    
-        })
+                                        
+        });
       
         $('#user_data').html(data);
   
@@ -85,7 +84,7 @@ $(document).ready(function () {
                       'Deleted!',
                       'The personnel file has been deleted.',
                       'success'
-                    )   
+                    );
                     getAll(1.5);
                     //myModalDelete.toggle();   
                   },
@@ -94,8 +93,7 @@ $(document).ready(function () {
                   }      
                 });
               }
-            })
-          
+            });          
         });
   
         $('a[data-bs-target="#editEmployeeModal"]').click(function() {
@@ -127,13 +125,13 @@ $(document).ready(function () {
               error: function (jqXHR) {
                 console.log(jqXHR);
               }
-            })           
-        })
+            });         
+        });
       },
       error: function (jqXHR) {
         console.log(jqXHR);
       }
-    })
+    });
   }
 
   function getLocations() {
@@ -153,8 +151,8 @@ $(document).ready(function () {
               id: value.id
             },
             success: function (resultEmp) {
-              console.log(value.id)
-              console.log(resultEmp);
+              // console.log(value.id);
+              // console.log(resultEmp);
               // console.log(resultEmp.data[0]['people']);
               let peopleCount = 0;
 
@@ -175,7 +173,7 @@ $(document).ready(function () {
                 },
                 success: function (result) {
                   // console.log(result);
-                  console.log(peopleCount);
+                  // console.log(peopleCount);
                   
                   // console.log(result.data[0]['locationCount'])
                   locationCount = 0;
@@ -255,7 +253,7 @@ $(document).ready(function () {
                                   {
                                     numOfDepartments = 0;
                                   }
-                                  console.log(numOfDepartments)
+                                  console.log(numOfDepartments);
                                 
                                   if((numEmployees > 0) && (numOfDepartments > 0)) 
                                   {
@@ -266,7 +264,7 @@ $(document).ready(function () {
                                       icon: 'error',
                                       title: 'Location has dependencies',
                                       text: "You can't delete this location!"
-                                    }) 
+                                    }); 
                                   } 
                                   else {
                                     // console.log("Go ahead Delete me!")
@@ -291,7 +289,7 @@ $(document).ready(function () {
                                               'Deleted!',
                                               'This location has been deleted.',
                                               'success'
-                                            )   
+                                            );
                                             getLocations(1.5);
                                           },
                                           error: function(jqXHR){
@@ -299,7 +297,7 @@ $(document).ready(function () {
                                           }      
                                         });
                                       }
-                                    })
+                                    });
                                   }
                                 },
                                 error: function(jqXHR){
@@ -493,6 +491,7 @@ $(document).ready(function () {
     })
   }
 
+  
   // Edit Employee
   $("#editEmployeeSubmit").click(function(){
     $.ajax({
@@ -680,8 +679,38 @@ $(document).ready(function () {
       
     });
   });
-});
 
+  search();
+  function search() {
+    // console.log("e: " + e.value);
+    $('#searchValue').keyup(function(e) {
+      let value = $('#searchValue').val();
+      console.log(value);
+    
+    // $.ajax({
+    //   url:"libs/php/searchPersonnel.php",
+    //   type: "POST",
+    //   dataType: "JSON",
+    //   data:{
+    //     value: value
+    //   },
+    //     success: function(result){
+    //       $("#user_data").html('');
+    //       console.log(result);
+               
+  
+    //     },
+    //     error:function(jqXHR){
+    //       console.log(jqXHR);
+    //     }
+      
+    // });
+  })
+  }
+
+
+
+});
 
 // Sweetalert toast initialize
 const Toast = Swal.mixin({
@@ -695,3 +724,5 @@ const Toast = Swal.mixin({
     toast.addEventListener('mouseleave', Swal.resumeTimer)
   }
 });
+
+
