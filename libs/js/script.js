@@ -5,6 +5,7 @@ $(document).ready(function () {
   let locData;
   let deptData;
   let editId;
+  let searchData;
  
   // Searchbar
   // $('.test').DataTable();
@@ -200,6 +201,8 @@ $(document).ready(function () {
                         
                         $('#addDepartmentLocation').append($("<option />").val(value.id).text(value.name));
                         $('#editDepartmentLocation').append($("<option />").val(value.id).text(value.name));
+                        $('#locationFilterSelect').append($("<option />").val(value.id).text(value.name));
+
 
                         $('#locationData').html(locData);                                              
 
@@ -375,7 +378,9 @@ $(document).ready(function () {
                     
                     $('#addNewDepartment').append(`<option value="${value.id}">${value.name}</option>`); 
                     $('#addDepartment').append(`<option value="${value.id}">${value.name}</option>`);                  
-                    $('#departmentEdit').append(`<option value="${value.id}">${value.name}</option>`);    
+                    $('#departmentEdit').append(`<option value="${value.id}">${value.name}</option>`);
+                    $('#departmentFilterSelect').append(`<option value="${value.id}">${value.name}</option>`);    
+    
                     
                     $('#editDepartmentName').append(`<option value="${value.id}">${value.name}</option>`);    
                                 
@@ -682,30 +687,58 @@ $(document).ready(function () {
 
   search();
   function search() {
-    // console.log("e: " + e.value);
+    let locationSelect;
+    let departmentSelect;
+    console.log($('#departmentFilterSelect').val());
+    console.log($('#locationFilterSelect').val());
+
     $('#searchValue').keyup(function(e) {
+      console.log($('#departmentFilterSelect').val());
+      departmentSelect = $('#departmentFilterSelect option:selected').val();
+      console.log(departmentSelect);
+
+      console.log($('#locationFilterSelect').val());
+      locationSelect = $('#locationFilterSelect option:selected').val();
+      console.log(locationSelect);
+
       let value = $('#searchValue').val();
       console.log(value);
-    
-    // $.ajax({
-    //   url:"libs/php/searchPersonnel.php",
-    //   type: "POST",
-    //   dataType: "JSON",
-    //   data:{
-    //     value: value
-    //   },
-    //     success: function(result){
-    //       $("#user_data").html('');
-    //       console.log(result);
-               
-  
-    //     },
-    //     error:function(jqXHR){
-    //       console.log(jqXHR);
-    //     }
+      if (value) {
+        $.ajax({
+          url:"libs/php/searchPersonnel.php",
+          type: "POST",
+          dataType: "JSON",
+          data:{
+            value: value
+          },
+            success: function(result){
+              $("#user_data").html('');
+              console.log(result);
+              searchData = 0;
+              $.each(result.data, function (index, value) {
+                searchData += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
+                // console.log(value.location);
+                searchData += "\
+                          <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
+                          data-toggle='tooltip' title='Edit'></i></a>\
+                          <a href='#' class='delete'><i class='far fa-trash-alt'\
+                          data-toggle='tooltip' title='Delete'></i></a></td></tr>";     
+                                              
+              });
+            
+              $('#user_data').html(searchData);
       
-    // });
-  })
+            },
+            error:function(jqXHR){
+              console.log(jqXHR);
+            }
+          
+        });
+      } else {
+        $('#user_data').html("");
+        $('#user_data').html(data);
+      }
+    })
   }
 
 
