@@ -155,10 +155,18 @@ $(document).ready(function () {
             success: function (resultEmp) {
               console.log(value.id)
               console.log(resultEmp);
-              console.log(result.data[0]['people']);
+              // console.log(resultEmp.data[0]['people']);
               let peopleCount = 0;
-              peopleCount = resultEmp.data[0]['people'];
-                        
+
+              if(resultEmp.data.length > 0 ) 
+                {
+                  peopleCount = resultEmp.data[0]['people'];
+                }
+              else
+                {
+                  peopleCount = 0;
+                }
+    
               $.ajax({
                 url: "libs/php/countLocations.php",
                 type: 'GET',
@@ -168,13 +176,21 @@ $(document).ready(function () {
                 success: function (result) {
                   // console.log(result);
                   console.log(peopleCount);
-
+                  
                   // console.log(result.data[0]['locationCount'])
                   locationCount = 0;
-                  locationCount = result.data[0]['locationCount'];
+                  if(resultEmp.data.length > 0) 
+                    {
+                      locationCount = result.data[0]['locationCount'];
+                    }
+                  else
+                    {
+                      locationCount = 0;
+                    }
+                  // locationCount = result.data[0]['locationCount'];
                   // console.log(value.name);
 
-                  locData += `<tr data-location-id='${value.id}'><td id="locationID" data-title="ID">${value.id}</td><td data-title="Location">${value.name}</td><td id="numDepartments" data-title="No. Depts">${locationCount}</td><td data-title="No. Employees" id="numPeople">${peopleCount}</td>`;
+                  locData += `<tr data-location-id='${value.id}'><td id="locationID" data-title="ID">${value.id}</td><td data-title="Location">${value.name}</td><td id="numDepartments" data-title="No. Departments" >${locationCount}</td><td data-title="No. Employees" id="numPeople">${peopleCount}</td>`;
                   locData += "\
                         <td data-title='Edit/Delete'><a href='#editLocationModal' class='edit' data-bs-toggle='modal' data-bs-target='#editLocationModal'><i class='far fa-edit'\
                         data-toggle='tooltip' title='Edit'></i></a>\
@@ -191,10 +207,9 @@ $(document).ready(function () {
 
                         // Delete Location Function
                         $(".deleteLocation").click(function(){
-                          // console.log('delete');
-                          // console.log($(this).closest('tr').data('location-id'));
+                          console.log('delete');
+                          console.log($(this).closest('tr').data('location-id'));
                           let deleteId = $(this).closest('tr').data('location-id');
-                          let numEmployees;
                           // See if any employee dependency
                           $.ajax({
                             url:"libs/php/countLocationEmployees.php",
@@ -204,11 +219,22 @@ $(document).ready(function () {
                               id: deleteId
                             },
                             success: function(result){
-                              // console.log(result);
+                              console.log(result);
                               // console.log(result.data[0]['people']);
-                              numEmployees = 0;
-                              numEmployees += result.data[0]['people'];
+                              let numEmployees;
+                              // numEmployees = 0;
+
+                              if (result.data.length > 0 ) 
+                              {
+                                numEmployees = result.data[0]['people'];
+                              } 
+                              else 
+                              {
+                                numEmployees = 0;
+                              }
+                              // numEmployees = result.data[0]['people'];
                               console.log(numEmployees);
+                              console.log(deleteId);
                               // See if any department dependency
                               $.ajax({
                                 url:"libs/php/countLocations.php",
@@ -221,15 +247,20 @@ $(document).ready(function () {
                                   let numOfDepartments;
                                   // console.log(resultLoc);
                                   numOfDepartments = 0;
-                                  // console.log(resultLoc.data[0]['locationCount'])
-                                  numOfDepartments = resultLoc.data[0]['locationCount'];
-                                  // console.log(numOfDepartments)
+                                  if (resultLoc.data.length > 0 ) 
+                                  {
+                                    numOfDepartments = resultLoc.data[0]['locationCount'];
+                                  } 
+                                  else 
+                                  {
+                                    numOfDepartments = 0;
+                                  }
+                                  console.log(numOfDepartments)
                                 
                                   if((numEmployees > 0) && (numOfDepartments > 0)) 
                                   {
-                                    console.log(numEmployees);
-                                    console.log(numOfDepartments);
-
+                                    // console.log(numEmployees);
+                                    // console.log(numOfDepartments);
                                     // console.log("You can not delete this Location!");
                                     Toast.fire({
                                       icon: 'error',
@@ -287,7 +318,7 @@ $(document).ready(function () {
                         $('a[data-bs-target="#editLocationModal"]').click(function() {
   
                           editId = $(this).closest('tr').data('location-id');
-                          // console.log(editId);
+                          console.log(editId);
                   
                           // Edit new location modal
                             $.ajax({
@@ -297,9 +328,9 @@ $(document).ready(function () {
                                 id: editId,
                               },
                               success: function (result) {
-                                // console.log(result);
-                                // console.log(result.data[0]['id']);
-                                // console.log(result.data[0].locationID);
+                                console.log(result);
+                                console.log(result.data[0]['id']);
+                                console.log(result.data[0]['name']);
                                 $('#editLocationId').attr("value", result.data[0]['id']);
                                 $('#editLocationName').attr("value", result.data[0]['name']);                                            
                               },
@@ -621,33 +652,31 @@ $(document).ready(function () {
 
   // Edit Location
   $("#editLocationSubmit").click(function(){
-    // console.log($('#departmentId').val());
-    // console.log($('#editDepartmentName').val());
-    // console.log($('#editDepartmentLocation').val());
+    console.log($('#editLocationId').val());
+    console.log($('#editLocationName').val());
     $.ajax({
-      url:"libs/php/editDepartment.php",
+      url:"libs/php/editLocation.php",
       type: "POST",
       dataType: "JSON",
       data:{
-        id: $('#departmentId').val(),
-        name: $('#editDepartmentName').val(),
-        locationId: $('#editDepartmentLocation').val()
+        id: $('#editLocationId').val(),
+        name: $('#editLocationName').val()
       },
-      success: function(result){
-        console.log(result);
-        Toast.fire({
-          icon: 'success',
-          title: 'Successfully edited a location'
-        })       
-  
-        $("#locationData").html('');
-        getLocations(1.5);
-        myModalEditLocation.toggle()
+        success: function(result){
+          console.log(result);
+          Toast.fire({
+            icon: 'success',
+            title: 'Successfully edited a location'
+          })       
+    
+          $("#locationData").html('');
+          getLocations(1.5);
+          myModalEditLocation.toggle()
 
-      },
-      error:function(jqXHR){
-        console.log(jqXHR);
-      }
+        },
+        error:function(jqXHR){
+          console.log(jqXHR);
+        }
       
     });
   });
