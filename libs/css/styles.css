@@ -117,6 +117,7 @@ table.table td a.edit {
 table.table td a.delete {
     color: #F44336;
 }
+
 table.table td i {
     font-size: 2.1rem;
 }
@@ -125,6 +126,9 @@ table.table .avatar {
     vertical-align: middle;
     margin-right: 10px;
 }
+
+
+
 
 /* Searchbar */
 input[type=text] {
@@ -144,6 +148,8 @@ input[type=text] {
   border-radius: 3px;
   background-color: rgb(192, 191, 191);
 }
+
+
 
 /*.pagination {
     float: right;
@@ -277,4 +283,13 @@ td:nth-of-type(1) {
   td:before { 
     content: attr(data-title); 
   }
+
+  .tabButton {
+    font-size: 0.6rem;
+  }
+
+  h2 {
+    font-size: 0.5rem;
+  }
+
 }
