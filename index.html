@@ -72,21 +72,65 @@
                   </h2>
                   <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                     <br class="accordion-body">
-                      <input id="searchValue" type="text" placeholder="Search..." class="col-sm-3" name="text"></br>
-                      <label class="filterLabel" for="departmentFilterSelect">Filter by Department</label></br>
-                      <select id="departmentFilterSelect" class="col-md-auto" name="departmentFilterSelect" >
-                        <option value="anyDepartment">Any Department</option>
-                      </select></br>
-                      <label class="filterLabel" for="locationFilterSelect">Filter by Location</label></br>
-                      <select id="locationFilterSelect" class="col-md-auto" name="locationFilterSelect" >
-                        <option value="anyLocation">Any Location</option>
-                      </select>
-                    </div>
+                      <div class="container">
+
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col" colspan="">Hidden</th>
+                              <th scope="col" colspan="2">Start Typing</th>
+                              <th scope="col" colspan="2">Filters</th>
+                            </tr>
+                          </thead>
+                          <tbody>                          
+                            <tr>
+                              <td>
+                                Hidden
+                              </td>
+                              <td>
+                                <div class="col">
+                                  <input id="searchValue" type="text" placeholder="Search..." class="col-sm-6" name="text">
+                                </div>
+                              </td>
+                              <td class="midCell">
+                                <label class="filterLabel accorText" for="departmentFilterSelect">Filter by Department</label>
+                              </td>
+                              <td>
+                                <select id="departmentFilterSelect" class="col-md-6" name="departmentFilterSelect" >
+                                  <option value="anyDepartment">Any Department</option>
+                                </select>
+                              </td>
+                              <td>
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                Hidden
+                              </td>
+                              <td>
+                                
+                              </td>
+                              <td class="midCell">
+                                <label class="filterLabel accorText" for="locationFilterSelect">Filter by Location</label>
+                              </td>
+                              <td>
+                                <select id="locationFilterSelect" class="col-md-6" name="locationFilterSelect" >
+                                  <option value="anyLocation">Any Location</option>
+                                </select>
+                              </td>
+                              <td>
+                                <button id="searchAdv" class="searchBtn btn btn-outline-info"><i class="fas fa-search fa-lg"></i></button> 
+                                <button id="searchClear" type="button" class="btn btn-outline-warning">Clear</button>
+
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                   </div>
                 </div>
-              
-              
-              <!-- <button type="submit" id="searchBtn" class="col-md-auto"><i class="fas fa-search"></i></button> -->
+              </div>
             </div>
           </div>
           <div class=" row">
