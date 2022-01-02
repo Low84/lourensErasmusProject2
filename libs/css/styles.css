@@ -10,6 +10,10 @@ body {
   font-size: 1.2rem;
 }
 
+.accorText label {
+  text-align: right;
+}
+
 .filterLabel {
   font-weight: bolder;
   font-size: 1.2rem;
@@ -38,7 +42,7 @@ body {
     background: #435d7d;
     color: #fff;
     padding: 16px 30px;
-    margin: 0px -25px 10px;
+    margin: 0px -10px 10px;
     border-radius: 3px 3px 0 0;
     display: -webkit-box;
 }
@@ -47,7 +51,7 @@ body {
     font-size: 2rem;
 }
 .table-title .btn-group {
-    float: right;
+    float: right !important;
 }
 .table-title .btn {
     color: #fff;
@@ -137,69 +141,15 @@ table.table .avatar {
     border-radius: 50%;
     vertical-align: middle;
     margin-right: 10px;
-}
+}  
 
-
-
-
-/* Searchbar */
-input[type=text] {
-
-  
-  padding: 6px;
-  border: 1px solid black;
-  border-radius: 3px;
-  margin-top: 8px;
-  margin-right: 16px;
-  font-size: 17px;
+/* table.table td button.searchClear {
+  background-color: #ffffff;
+  color: #566787;
+  border-radius: 5px;
+  padding-top: 5px;
 } */
 
-#searchBtn {
-
-  padding: 2px 6px;
-  border-radius: 3px;
-  background-color: rgb(192, 191, 191);
-}
-
-
-
-/*.pagination {
-    float: right;
-    margin: 0 0 5px;
-}
- .pagination li a {
-    border: none;
-    font-size: 1rem;
-    min-width: 30px;
-    min-height: 30px;
-    color: #999;
-    margin: 0 2px;
-    line-height: 30px;
-    border-radius: 2px !important;
-    text-align: center;
-    padding: 0 6px;
-}
-.pagination li a:hover {
-    color: #666;
-}	
-.pagination li.active a, .pagination li.active a.page-link {
-    background: #03A9F4;
-}
-.pagination li.active a:hover {        
-    background: #0397d6;
-}
-.pagination li.disabled i {
-    color: #ccc;
-}
-.pagination li i {
-    font-size: 1rem;
-    padding-top: 6px
-}
-.hint-text {
-    float: left;
-    margin-top: 10px;
-    font-size: 1.2rem;
-}  */   
 
 /* Modal styles */
 .modal .modal-dialog {
@@ -304,4 +254,7 @@ td:nth-of-type(1) {
     font-size: 0.5rem;
   }
 
+  .table-title .btn-group {
+    float: right !important;
+  }
 }
