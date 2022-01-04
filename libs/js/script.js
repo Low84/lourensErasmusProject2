@@ -64,7 +64,8 @@ $(document).ready(function () {
 
           editId = $(this).closest('tr').data('personnel-id');
           console.log(editId);
-          editTheEmployee(editId);  
+          editTheEmployee(editId); 
+ 
         });
         
       },
@@ -396,7 +397,7 @@ $(document).ready(function () {
         });
 
         $('a[data-bs-target="#editDepartModal"]').click(function() {
-  
+
           editId = $(this).closest('tr').data('department-id');
           // console.log(editId);
   
@@ -455,8 +456,8 @@ $(document).ready(function () {
           title: 'Successfully edited an employee'
         })    
 
-        $('#departmentEdit').html('');
-        getDepartments();  
+        // $('#departmentEdit').val('');
+        // getDepartments();  
         $("#user_data").html('');
         getAll(1.5);
         myModal.toggle()
@@ -471,8 +472,8 @@ $(document).ready(function () {
   // Add employee
   $("#addEmployeeSubmit").click(function(){
     // console.log($('#addFirstName').val());
-    getDepartments();
-    getLocations();
+    // getDepartments();
+    // getLocations();
     $.ajax({
       url:"libs/php/insertEmployee.php",
       type: "POST",
@@ -494,9 +495,9 @@ $(document).ready(function () {
         $('#addLastName').val('');
         $('#addJobTitle').val('');
         $('#addEmail').val('');
-        $('#addDepartment').html('');
+        // $('#addDepartment').html('');
 
-        getDepartments();
+        // getDepartments();
 
         $("#user_data").html('');
         getAll(1.5);
@@ -989,10 +990,6 @@ advancedSearch()
       }
     });
   }
-
-  // function clearEditFields() {
-  //   $('#firstNameEdit').val('');
-  // }
 
   function clearTheFields(value, departmentSelect, locationSelect) {
     $("#searchClear").click(function() {
