@@ -458,7 +458,6 @@ $(document).ready(function () {
         $('#departmentEdit').html('');
         getDepartments();  
         $("#user_data").html('');
-
         getAll(1.5);
         myModal.toggle()
  
@@ -731,8 +730,50 @@ advancedSearch()
       // console.log(locationSelect);
       // console.log(value);
       clearTheFields(value, departmentSelect, locationSelect);
+      if ((value) && (departmentSelect === 'anyDepartment') && (locationSelect === 'anyLocation')) {
+        $.ajax({
+          url:"libs/php/searchPersonnel.php",
+          type: "POST",
+          dataType: "JSON",
+          data:{
+            value: value
+          },
+            success: function(result){
+              $("#user_data").html('');
+              // console.log(result);
+              searchData = 0;
+              $.each(result.data, function (index, value) {
+                searchData += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
+                // console.log(value.location);
+                searchData += "\
+                          <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
+                          data-toggle='tooltip' title='Edit'></i></a>\
+                          <a href='#' class='delete'><i class='far fa-trash-alt'\
+                          data-toggle='tooltip' title='Delete'></i></a></td></tr>";     
+                                              
+              });
 
-      if ((value) && (departmentSelect !== 'anyDepartment') && (locationSelect === 'anyLocation')) {
+              $('#user_data').html(searchData);
+              $(".delete").click(function(){
+                let employeeId = $(this).closest('tr').data('personnel-id');
+                deleteTheEmployee(employeeId);                          
+              });
+              
+              $('a[data-bs-target="#editEmployeeModal"]').click(function() {
+  
+                editId = $(this).closest('tr').data('personnel-id');
+                // console.log(editId);
+                editTheEmployee(editId);                         
+              });
+
+            },
+            error:function(jqXHR){
+              console.log(jqXHR);
+            }
+          
+        });
+      }
+      else if ((value) && (departmentSelect !== 'anyDepartment') && (locationSelect === 'anyLocation')) {
         $.ajax({
           url:"libs/php/searchDepartmentFilter.php",
           type: "POST",
