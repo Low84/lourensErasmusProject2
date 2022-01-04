@@ -6,10 +6,6 @@ $(document).ready(function () {
   let deptData;
   let editId;
   let searchData;
- 
-  // Searchbar
-  // $('.test').DataTable();
-  // $('[data-toggle="tooltip"]').tooltip();
   
   // Employee Modals
   var myModal = new bootstrap.Modal(document.getElementById('editEmployeeModal'), {
@@ -39,9 +35,6 @@ $(document).ready(function () {
   getLocations();
   getDepartments();
  
- 
-  
-  
   function getAll() {
     $.ajax({
       url: "libs/php/getAll.php",
@@ -120,8 +113,7 @@ $(document).ready(function () {
                 },
                 success: function (result) {
                   // console.log(result);
-                  // console.log(peopleCount);
-                  
+                  // console.log(peopleCount);                  
                   // console.log(result.data[0]['locationCount'])
                   locationCount = 0;
                   if(resultEmp.data.length > 0) 
@@ -278,7 +270,8 @@ $(document).ready(function () {
                                 // console.log(result.data[0]['id']);
                                 // console.log(result.data[0]['name']);
                                 $('#editLocationId').attr("value", result.data[0]['id']);
-                                $('#editLocationName').attr("value", result.data[0]['name']);                                            
+                                $('#editLocationName').val(result.data[0]['name']);
+                                // $('#editLocationName').attr("value", result.data[0]['name']);                                            
                               },
                               error: function (jqXHR) {
                                 console.log(jqXHR);
@@ -324,9 +317,7 @@ $(document).ready(function () {
                     $('#addNewDepartment').append(`<option value="${value.id}">${value.name}</option>`); 
                     $('#addDepartment').append(`<option value="${value.id}">${value.name}</option>`);                  
                     $('#departmentEdit').append(`<option value="${value.id}">${value.name}</option>`);
-                    $('#departmentFilterSelect').append(`<option value="${value.id}">${value.name}</option>`);    
-    
-                    
+                    $('#departmentFilterSelect').append(`<option value="${value.id}">${value.name}</option>`);                            
                     $('#editDepartmentName').append(`<option value="${value.id}">${value.name}</option>`);    
                                 
         })
@@ -387,8 +378,7 @@ $(document).ready(function () {
                           'This department has been deleted.',
                           'success'
                         )   
-                        getDepartments(1.5);
-                        //myModalDelete.toggle();   
+                        getDepartments(1.5);   
                       },
                       error: function(jqXHR){
                         console.log(jqXHR);
@@ -423,16 +413,15 @@ $(document).ready(function () {
                 // console.log(result.data[0].locationID);
                 // console.log(result.data.personnel[0]['departmentID']);
                 $('#departmentId').attr("value", result.data[0]['id']);
-                $('#editDepartmentName').attr("value", result.data[0]['name']);              
+                $('#editDepartmentName').val(result.data[0]['name']);
+                // $('#editDepartmentName').attr("value", result.data[0]['name']);              
                 $("#editDepartmentLocation").val(result.data[0].locationID).change();
                 
               },
               error: function (jqXHR) {
                 console.log(jqXHR);
               }
-            })
-  
-            
+            })            
           })
       },
       error: function (jqXHR) {
@@ -441,7 +430,6 @@ $(document).ready(function () {
     })
   }
 
-  
   // Edit Employee
   $("#editEmployeeSubmit").click(function(){
     console.log(editId);
@@ -466,19 +454,10 @@ $(document).ready(function () {
           icon: 'success',
           title: 'Successfully edited an employee'
         })    
-        // $('#firstNameEdit').val('');
-        // $('#lastNameEdit').val('');
-        // $('#jobEdit').val('');
-        // $('#emailEdit').val('');
-
-        // editId = '';
-
-        // clearEditFields();
 
         $('#departmentEdit').html('');
         getDepartments();  
         $("#user_data").html('');
-
 
         getAll(1.5);
         myModal.toggle()
@@ -508,7 +487,6 @@ $(document).ready(function () {
       },
       success: function(result){
         // console.log(result);
-        // $('#addEmployeeModal').modal('hide');
         Toast.fire({
           icon: 'success',
           title: 'Successfully added an employee'
@@ -521,7 +499,6 @@ $(document).ready(function () {
 
         getDepartments();
 
-        // getAll();
         $("#user_data").html('');
         getAll(1.5);
         myModalAdd.toggle();
@@ -536,7 +513,6 @@ $(document).ready(function () {
   $("#addDepartmentSubmit").click(function(){
     // console.log($('#addDepartmentName').val());
     // console.log($('#addDepartmentLocation').val());
-
     $.ajax({
       url:"libs/php/insertDepartment.php",
       type: "POST",
@@ -558,8 +534,7 @@ $(document).ready(function () {
 
         $("#departData").html('');
         getDepartments(1.5);
-        myModalAddDept.toggle();
-        
+        myModalAddDept.toggle();    
       },
       error:function(jqXHR){
         console.log(jqXHR);
@@ -603,7 +578,6 @@ $(document).ready(function () {
   // Add Location
   $("#addLocationSubmit").click(function(){
     // console.log($('#addLocationName').val());
-
     $.ajax({
       url:"libs/php/insertLocation.php",
       type: "POST",
@@ -672,7 +646,6 @@ $(document).ready(function () {
       // console.log($('#departmentFilterSelect').val());
       departmentSelect = $('#departmentFilterSelect option:selected').val();
       // console.log(departmentSelect);
-
       // console.log($('#locationFilterSelect').val());
       locationSelect = $('#locationFilterSelect option:selected').val();
       // console.log(locationSelect);
@@ -886,8 +859,7 @@ advancedSearch()
             },
             error:function(jqXHR){
               console.log(jqXHR);
-            }
-          
+            }     
         });
       }
       else {
@@ -960,10 +932,14 @@ advancedSearch()
         console.log(result.data.personnel[0]['email']);
         console.log(result.data.personnel[0].departmentID);
         $('#idEdit').attr("value", result.data.personnel[0]['id']);
-        $('#firstNameEdit').attr("value", result.data.personnel[0]['firstName']);
-        $('#lastNameEdit').attr("value", result.data.personnel[0]['lastName']);
-        $('#jobEdit').attr("value", result.data.personnel[0]['jobTitle']);
-        $('#emailEdit').attr("value", result.data.personnel[0]['email']);
+        $('#firstNameEdit').val(result.data.personnel[0]['firstName']);
+        // $('#firstNameEdit').attr("value", result.data.personnel[0]['firstName']);
+        $('#lastNameEdit').val(result.data.personnel[0]['lastName']);
+        // $('#lastNameEdit').attr("value", result.data.personnel[0]['lastName']);
+        $('#jobEdit').val(result.data.personnel[0]['jobTitle']);
+        // $('#jobEdit').attr("value", result.data.personnel[0]['jobTitle']);
+        $('#emailEdit').val(result.data.personnel[0]['email']);
+        // $('#emailEdit').attr("value", result.data.personnel[0]['email']);
         $("#departmentEdit").val(result.data.personnel[0].departmentID).change();
         
       },
