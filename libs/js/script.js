@@ -409,7 +409,7 @@ $(document).ready(function () {
                 id: editId,
               },
               success: function (result) {
-                console.log(result);
+                // console.log(result);
                 // console.log(result.data[0]['id']);
                 // console.log(result.data[0].locationID);
                 // console.log(result.data.personnel[0]['departmentID']);
@@ -450,7 +450,7 @@ $(document).ready(function () {
         deptId:$("#departmentEdit").val()
       },
       success: function(result){
-        console.log(result);
+        // console.log(result);
         Toast.fire({
           icon: 'success',
           title: 'Successfully edited an employee'
@@ -544,9 +544,9 @@ $(document).ready(function () {
 
   // Edit Department
   $("#editDepartmentSubmit").click(function(){
-    console.log($('#departmentId').val());
-    console.log($('#editDepartmentName').val());
-    console.log($('#editDepartmentLocation').val());
+    // console.log($('#departmentId').val());
+    // console.log($('#editDepartmentName').val());
+    // console.log($('#editDepartmentLocation').val());
     $.ajax({
       url:"libs/php/editDepartment.php",
       type: "POST",
@@ -958,8 +958,8 @@ advancedSearch()
       }); 
   };
   function editTheEmployee(editId) {
-    console.log(editId);
-    console.log('Edit Employee');
+    // console.log(editId);
+    // console.log('Edit Employee');
     $.ajax({
       url: "libs/php/getPersonnelByID.php",
       type: 'GET',
