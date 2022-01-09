@@ -23,7 +23,11 @@
   <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rokkitt&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+  <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rokkitt&display=swap" rel="stylesheet"> -->
   <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="180x180" href="./libs/images/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="./libs/images/favicon-32x32.png">
@@ -33,10 +37,20 @@
 
   <title>Company Directory</title>
 </head>
+<div class="container">
+  <nav class="container card sticky-top">
+    <div class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
+      <button class="nav-link active tabButton" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+        type="button" role="tab" aria-controls="nav-home" aria-selected="true">Personnel</button>
+      <button class="nav-link tabButton" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+        type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Locations</button>
+      <button class="nav-link tabButton" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
+        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Departments</button>
+    </div>
+  </nav>
 
-<div>
-  <div id="navButtons" class="container">
-    <nav>
+
+    <!-- <nav>
       <div class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
         <button class="nav-link active tabButton" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
           type="button" role="tab" aria-controls="nav-home" aria-selected="true">Personnel</button>
@@ -45,113 +59,99 @@
         <button class="nav-link tabButton" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
           type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Departments</button>
       </div>
-    </nav>
+    </nav> -->
   <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 
         <!-- Employee Details Table -->
-      <div class="container">
-        <div class="row justify-content-start">
-
-          <div class="table-title">
-            <div class="col-sm-6">
-              <h2>Personnel</h2>
-            </div>
-            <div class="col-sm-6">
-              <a href="#addEmployeeModal" class="btn btn-success addBtn" data-bs-toggle="modal"><i class="fas fa-user-plus"></i></a>
-            </div>
-          </div>
-          <div class="container"  id="searchBarDiv">
+      <!-- <div class="container"> -->
+          <div class="container">
             <div class="row justify-content-start">
-              <div class="accordion accordion-flush" id="accordionFlushExample">
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="flush-headingOne">
-                    <button class="accordion-button collapsed searchPersonnel" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                      Search Personnel...
-                    </button>
-                  </h2>
-                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                    <br class="accordion-body">
-                      <div class="container">
 
-                        <table class="table">
-                          <thead>
-                            <tr>
-                              <th scope="col" colspan="">Hidden</th>
-                              <th scope="col" colspan="2">Start Typing</th>
-                              <th scope="col" colspan="2">Filters</th>
-                            </tr>
-                          </thead>
-                          <tbody>                          
-                            <tr>
-                              <td>
-                                Hidden
-                              </td>
-                              <td>
-                                <div class="col">
-                                  <input id="searchValue" type="text" placeholder="Search..." class="col-sm-6" name="text">
-                                </div>
-                              </td>
-                              <td class="midCell">
-                                <label class="filterLabel accorText" for="departmentFilterSelect">Filter by Department</label>
-                              </td>
-                              <td>
-                                <select id="departmentFilterSelect" class="col-md-6" name="departmentFilterSelect" >
-                                  <option value="anyDepartment">Any Department</option>
-                                </select>
-                              </td>
-                              <td>
-                                
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                Hidden
-                              </td>
-                              <td>
-                                
-                              </td>
-                              <td class="midCell">
-                                <label class="filterLabel accorText" for="locationFilterSelect">Filter by Location</label>
-                              </td>
-                              <td>
-                                <select id="locationFilterSelect" class="col-md-6" name="locationFilterSelect" >
-                                  <option value="anyLocation">Any Location</option>
-                                </select>
-                              </td>
-                              <td>
-                                <button id="searchAdv" class="searchBtn btn btn-outline-info"><i class="fas fa-search fa-lg"></i></button> 
-                                <button id="searchClear" type="button" class="btn btn-outline-warning">Clear</button>
-
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+            <div class="table-title">
+              <div class="col-sm-6">
+                <h2>Personnel</h2>
+              </div>
+              <div class="col-sm-6">
+                <a href="#addEmployeeModal" class="btn btn-success addBtn" data-bs-toggle="modal"><i class="fas fa-user-plus"></i></a>
+              </div>
+            </div>
+          
+            <div class="container">
+              <div class="row justify-content-start">
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                      <button class="accordion-button collapsed searchPersonnel" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Search Personnel...
+                      </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                      <div class="accordion-body">
+                        <div class="container">
+                          <div class="row row-cols-2 searchField">
+                            <div class="col-lg-6"></div>
+                            <div class="col">
+                              <input id="searchValue" type="text" placeholder="Search..." class="col-lg-6" name="text">
+                              <!-- <button id="searchAdv" class="btn btn-outline-info"><i class="fas fa-search fa-lg"></i></button> 
+                              <button id="searchClear" type="button" class="btn btn-outline-warning">Clear</button> -->
+                            </div>                          
+                          </div>
+                          <div class="row row-cols-2">
+                            <div class="col">
+                              <label class="filterLabel accorText" for="departmentFilterSelect">Filter by Department</label>
+                            </div>
+                            <div class="col">
+                              <select id="departmentFilterSelect" class="col-sm-4" name="departmentFilterSelect" >
+                                <option value="anyDepartment">Any Department</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="row row-cols-2">
+                            <div class="col">
+                              <label class="filterLabel accorText" for="locationFilterSelect">Filter by Location</label>
+                            </div>
+                            <div class="col">
+                              <select id="locationFilterSelect" class="col-sm-4" name="locationFilterSelect" >
+                                <option value="anyLocation">Any Location</option>
+                              </select>
+                            </div>
+                          </div>
+                          
+                          <div class="row">
+                            <div class="col-lg-10"></div>
+                            <div class="col col-md-offset-0">
+                              <button id="searchAdv" class="btn btn-outline-info"><i class="fas fa-search fa-lg"></i></button> 
+                              <button id="searchClear" type="button" class="btn btn-outline-warning">Clear</button>
+                            </div>                          
+                          </div>
+                        </div>                        
                       </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class=" row">
-            <table class="table table-striped test">
-              <thead>
-                <tr class="justifyTable">
-                  <th>ID</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Location</th>
-                  <th>Email</th>                  
-                  <th>Department</th>
-                  <th>Edit/Delete</th>
-                </tr>
-              </thead>
-              <tbody id="user_data">
-              </tbody>
-            </table>
+          <!-- <div class="container" id="spaceTable"> -->
+            <div class="row">
+
+              <table class="table table-striped test">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th class="tablet-hidden">Location</th>
+                    <th class="tablet-hidden">Email</th>                  
+                    <th class="tablet-hidden">Department</th>
+                    <th class="editDel">Edit/Delete</th>
+                  </tr>
+                </thead>
+                <tbody id="user_data">
+                </tbody>
+              </table>
+              </div>        
+            <!-- </div> -->
           </div>
-        </div>
-      </div>
         <!-- End of Employee Details Table -->
     </div>
       <!-- Locations -->
@@ -163,25 +163,24 @@
               <div class="col-sm-6">
                 <h2>Locations</h2>
               </div>
-              <div class="col-sm-6 tableTitle">
+              <div class="col-sm-6">
                 <a href="#addLocationModal" class="btn btn-success addEmployee" data-bs-toggle="modal"><i class="far fa-plus-square"></i></a>
               </div>
-            </div>
-            <div class="row">
+            </div>            
+            <div class="row">            
               <table class="table table-striped test">
                 <thead>
-                  <tr class="justifyTable">
-                    <th>ID</th>
+                  <tr>                    
                     <th>Location</th>
-                    <th>Number of Departments</th>
-                    <th>Number of Personnel</th>
-                    <th>Edit/Delete</th>
+                    <th class="centerNum" >Number of Departments</th>
+                    <th class="centerNum">Number of Personnel</th>
+                    <th class="editDel">Edit/Delete</th>
                   </tr>
                 </thead>
                 <tbody id="locationData">
                 </tbody>
               </table>
-            </div>
+            </div>      
           </div>
         </div>
         <!-- End of Locations Table -->
@@ -202,11 +201,10 @@
             <div class="row">
               <table class="table table-striped test">
                 <thead>
-                  <tr class="justifyTable">
-                    <th>ID</th>
+                  <tr>                  
                     <th>Department</th>
                     <th>Location</th>
-                    <th>Edit/Delete</th>
+                    <th class="editDel">Edit/Delete</th>
                   </tr>
                 </thead>
                 <tbody id="departData">
@@ -218,6 +216,7 @@
         <!-- End of Departments Table -->
 
       </div>
+    </div>
   </div>
 </div>
   <!-- Modals -->
@@ -271,10 +270,10 @@
                 class="far fa-window-close fa-2x"></i></a>
           </div>
           <div class="modal-body">
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label>Personnel ID</label>
               <input id="idEdit" type="text" class="form-control" name="idEdit" readonly>
-            </div>
+            </div> -->
             <div class="form-group">
               <label>First Name</label>
               <input id="firstNameEdit" type="text" class="form-control" name="firstNameEdit" required>
@@ -366,10 +365,10 @@
                 class="far fa-window-close fa-2x"></i></a>
           </div>
           <div class="modal-body">
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label>Department ID</label>
               <input id="departmentId" type="text" class="form-control" name="idEdit" readonly>
-            </div>
+            </div> -->
             <div class="form-group">
               <label>Department Name</label>
               <input id="editDepartmentName" type="text" class="form-control" name="editDepartmentName" required>
@@ -421,10 +420,10 @@
                 class="far fa-window-close fa-2x"></i></a>
           </div>
           <div class="modal-body">
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label>Location ID</label>
               <input id="editLocationId" type="text" class="form-control" name="editLocationId" readonly>
-            </div>
+            </div> -->
             <div class="form-group">
               <label>Location Name</label>
               <input id="editLocationName" type="text" class="form-control" name="editLocationName" required>
@@ -436,17 +435,16 @@
           </div>
       </div>
     </div>
+ 
   </div>
 
-
+   <a href="#" id="toTopBtn" class="cd-top text-replace js-cd-top cd-top--is-visible cd-top--fade-out" data-abc="true"></a>
   <!-- jQuery -->
   <script type="application/javascript" src="./vendors/js/jquery-3.6.0.js"></script>
   <!-- Bootstrap js -->
   <script type="application/javascript" src="./vendors/js/bootstrap.bundle.js"></script>
   <!-- Bootstrap DataTables -->
   <script type="application/javascript" src="./vendors/js/datatables.min.js"></script>
-
-  <script type="application/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
