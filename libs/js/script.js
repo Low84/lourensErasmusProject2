@@ -6,7 +6,7 @@ $(document).ready(function () {
   let deptData;
   let editId;
   let searchData;
-  
+
   // Employee Modals
   var myModal = new bootstrap.Modal(document.getElementById('editEmployeeModal'), {
     keyboard: false,
@@ -34,6 +34,23 @@ $(document).ready(function () {
   getAll();
   getLocations();
   getDepartments();
+
+  
+    $(window).scroll(function() {
+    if ($(this).scrollTop() > 20) {
+    $('#toTopBtn').fadeIn();
+    } else {
+    $('#toTopBtn').fadeOut();
+    }
+    });
+    
+    $('#toTopBtn').click(function() {
+    $("html, body").animate({
+    scrollTop: 0
+    }, 1000);
+    return false;
+    });
+
  
   function getAll() {
     $.ajax({
@@ -43,10 +60,12 @@ $(document).ready(function () {
         // console.log(result);
         data = null;
         $.each(result.data, function (index, value) {
-          data += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
+          data += `<tr data-personnel-id='${value.id}'><td>${value.lastName}, ${value.firstName}</td><td class="tablet-hidden">${value.location}</td><td class="tablet-hidden">${value.email}</td><td  class="tablet-hidden">${value.department}</td>`;
+
+          // data += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
           // console.log(value.location);
           data += "\
-                    <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
+                    <td class='editDel'><a href='#editEmployeeModal' class='edit editDel' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
                     data-toggle='tooltip' title='Edit'></i></a>\
                     <a href='#' class='delete'><i class='far fa-trash-alt'\
                     data-toggle='tooltip' title='Delete'></i></a></td></tr>";     
@@ -57,6 +76,7 @@ $(document).ready(function () {
   
         $(".delete").click(function(){
           let employeeId = $(this).closest('tr').data('personnel-id');
+ 
           deleteTheEmployee(employeeId);                          
         });
   
@@ -128,9 +148,9 @@ $(document).ready(function () {
                   // locationCount = result.data[0]['locationCount'];
                   // console.log(value.name);
 
-                  locData += `<tr data-location-id='${value.id}'><td id="locationID" data-title="ID">${value.id}</td><td data-title="Location">${value.name}</td><td id="numDepartments" data-title="No. Departments" >${locationCount}</td><td data-title="No. Employees" id="numPeople">${peopleCount}</td>`;
+                  locData += `<tr data-location-id='${value.id}'><td data-title="Location" data-location-name='${value.name}'>${value.name}</td><td id="numDepartments" data-title="No. Departments" class="centerNum">${locationCount}</td><td data-title="No. Employees" id="numPeople" class="centerNum">${peopleCount}</td>`;
                   locData += "\
-                        <td data-title='Edit/Delete'><a href='#editLocationModal' class='edit' data-bs-toggle='modal' data-bs-target='#editLocationModal'><i class='far fa-edit'\
+                        <td data-title='Edit/Delete' class='editDel'><a href='#editLocationModal' class='edit' data-bs-toggle='modal' data-bs-target='#editLocationModal'><i class='far fa-edit'\
                         data-toggle='tooltip' title='Edit'></i></a>\
                         <a href='#' class='delete deleteLocation' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                         data-toggle='tooltip' title='Delete'></i></a></td></tr>";
@@ -150,106 +170,121 @@ $(document).ready(function () {
                           // console.log('delete');
                           // console.log($(this).closest('tr').data('location-id'));
                           let deleteId = $(this).closest('tr').data('location-id');
-                          // See if any employee dependency
                           $.ajax({
-                            url:"libs/php/countLocationEmployees.php",
-                            type: "POST",
-                            dataType: "JSON",
-                            data:{
-                              id: deleteId
+                            url: "libs/php/getLocationByID.php",
+                            type: 'GET',
+                            data: {
+                              id: deleteId,
                             },
-                            success: function(result){
-                              // console.log(result);
-                              // console.log(result.data[0]['people']);
-                              let numEmployees;
-                              // numEmployees = 0;
+                            success: function (result) {
+                              let locName = result.data[0]['name']
+                            
+                          
+                            // See if any employee dependency
+                            $.ajax({
+                              url:"libs/php/countLocationEmployees.php",
+                              type: "POST",
+                              dataType: "JSON",
+                              data:{
+                                id: deleteId
+                              },
+                              success: function(result){
+                                // console.log(result);
+                                // console.log(result.data[0]['people']);
+                                let numEmployees;
+                                // numEmployees = 0;
 
-                              if (result.data.length > 0 ) 
-                              {
-                                numEmployees = result.data[0]['people'];
-                              } 
-                              else 
-                              {
-                                numEmployees = 0;
-                              }
-                              // console.log(numEmployees);
-                              // console.log(deleteId);
-                              // See if any department dependency
-                              $.ajax({
-                                url:"libs/php/countLocations.php",
-                                type: "POST",
-                                dataType: "JSON",
-                                data:{
-                                  id: deleteId
-                                },
-                                success: function(resultLoc){
-                                  let numOfDepartments;
-                                  // console.log(resultLoc);
-                                  numOfDepartments = 0;
-                                  if (resultLoc.data.length > 0 ) 
-                                  {
-                                    numOfDepartments = resultLoc.data[0]['locationCount'];
-                                  } 
-                                  else 
-                                  {
+                                if (result.data.length > 0 ) 
+                                {
+                                  numEmployees = result.data[0]['people'];
+                                } 
+                                else 
+                                {
+                                  numEmployees = 0;
+                                }
+                                // console.log(numEmployees);
+                                // console.log(deleteId);
+                                // See if any department dependency
+                                $.ajax({
+                                  url:"libs/php/countLocations.php",
+                                  type: "POST",
+                                  dataType: "JSON",
+                                  data:{
+                                    id: deleteId
+                                  },
+                                  success: function(resultLoc){
+                                    let numOfDepartments;
+                                    // console.log(resultLoc);
                                     numOfDepartments = 0;
-                                  }
-                                  console.log(numOfDepartments);
-                                
-                                  if((numEmployees > 0) && (numOfDepartments > 0)) 
-                                  {
-                                    // console.log(numEmployees);
-                                    // console.log(numOfDepartments);
-                                    // console.log("You can not delete this Location!");
-                                    Toast.fire({
-                                      icon: 'error',
-                                      title: 'Location has dependencies',
-                                      text: "You can't delete this location!"
-                                    }); 
-                                  } 
-                                  else {
-                                    // console.log("Go ahead Delete me!")
-                                    // console.log(deleteId);                      
-                                    Swal.fire({
-                                      title: 'Are you sure?',
-                                      text: "You won't be able to revert this!",
-                                      icon: 'warning',
-                                      showCancelButton: true,
-                                      confirmButtonColor: '#3085d6',
-                                      cancelButtonColor: '#d33',
-                                      confirmButtonText: 'Yes, delete it!'
-                                    }).then((result) => {
-                                      if (result.isConfirmed) {
-                                        $.ajax({
-                                          type: "POST",
-                                          url: "libs/php/deleteLocationByID.php",
-                                          data: { id: deleteId },
-                                          success: function (data) {
-                                            // console.log(data);
-                                            Swal.fire(
-                                              'Deleted!',
-                                              'This location has been deleted.',
-                                              'success'
-                                            );
-                                            getLocations(1.5);
-                                          },
-                                          error: function(jqXHR){
-                                            console.log(jqXHR);
-                                          }      
-                                        });
-                                      }
-                                    });
-                                  }
-                                },
-                                error: function(jqXHR){
+                                    if (resultLoc.data.length > 0 ) 
+                                    {
+                                      numOfDepartments = resultLoc.data[0]['locationCount'];
+                                    } 
+                                    else 
+                                    {
+                                      numOfDepartments = 0;
+                                    }
+                                    console.log(numOfDepartments);
+                                  
+                                    if((numEmployees > 0) && (numOfDepartments > 0)) 
+                                    {
+                                      // console.log(numEmployees);
+                                      // console.log(numOfDepartments);
+                                      // console.log("You can not delete this Location!");
+                                      Toast.fire({
+                                        icon: 'error',
+                                        title: 'Location has dependencies',
+                                        text: "You can't delete this location!"
+                                      }); 
+                                    } 
+                                    else {
+                                      // console.log("Go ahead Delete me!")
+                                      // console.log(deleteId);                      
+                                      Swal.fire({
+                                        title: `Are you sure you want to delete the location ${locName}?`,
+                                        text: "You won't be able to revert this!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, delete it!'
+                                      }).then((result) => {
+                                        if (result.isConfirmed) {
+                                          $.ajax({
+                                            type: "POST",
+                                            url: "libs/php/deleteLocationByID.php",
+                                            data: { id: deleteId },
+                                            success: function (data) {
+                                              // console.log(data);
+                                              Swal.fire(
+                                                'Deleted!',
+                                                'This location has been deleted.',
+                                                'success'
+                                              );
+                                              getLocations(1.5);
+                                            },
+                                            error: function(jqXHR){
+                                              console.log(jqXHR);
+                                            }      
+                                          });
+                                        }
+                                      });
+                                    }
+                                  },
+                                  error: function(jqXHR){
+                                  console.log(jqXHR);
+                                  }      
+                                });
+                              },
+                              error:function(jqXHR){
                                 console.log(jqXHR);
-                                }      
-                              });
-                            },
-                            error:function(jqXHR){
-                              console.log(jqXHR);
-                            }                          
-                          });
+                              }                          
+                            });
+                          },
+                          error:function(jqXHR){
+                            console.log(jqXHR);
+                          }                          
+                        });
                                                                   
                         });
                         // 
@@ -308,9 +343,9 @@ $(document).ready(function () {
           // console.log(value.id);
           // console.log(value.locationID);
   
-          deptData += `<tr data-department-id='${value.id}'><td data-title="ID" id="departmentTableId">${value.id}</td><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Dept. Location">${value.location}</td>`;
+          deptData += `<tr data-department-id='${value.id}'><td data-title="Department">${value.name}</td><td id="deptLocation "data-title="Dept. Location">${value.location}</td>`;
           deptData += "\
-                    <td data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal' data-bs-target='#editDepartModal'><i class='far fa-edit'\
+                    <td class='editDel' data-title='Edit/Delete'><a href='#editDepartModal' class='edit' data-bs-toggle='modal' data-bs-target='#editDepartModal'><i class='far fa-edit'\
                     data-toggle='tooltip' title='Edit'></i></a>\
                     <a href='#' class='delete deleteDepartment' data-bs-toggle='modal'><i class='far fa-trash-alt'\
                     data-toggle='tooltip' title='Delete'></i></a></td></tr>";                
@@ -329,77 +364,94 @@ $(document).ready(function () {
           // console.log($(this).closest('tr').data('department-id'));
           let deleteId = $(this).closest('tr').data('department-id');
           let numEmployees;
+
           $.ajax({
-            url:"libs/php/countEmployees.php",
-            type: "POST",
-            dataType: "JSON",
-            data:{
-              // deptId: $(this).closest('tr').data('department-id')
-              deptId: deleteId
-
+            url: "libs/php/getDepartmentByID.php",
+            type: 'GET',
+            data: {
+              id: deleteId,
             },
-            success: function(result){
-              // console.log(result);
-              // console.log(result.data[0]['count']);
-              numEmployees = 0;
-              numEmployees += result.data[0]['count'];
-              // console.log(numEmployees);
-              if(numEmployees > 0) 
-              {
-                // console.log("You can not delete this Department!");
-                Toast.fire({
-                  icon: 'error',
-                  title: 'Department has dependencies',
-                  text: "You can't delete this department!"
-                }) 
-              } 
-              else {
-                // console.log("Go ahead Delete me!")
-                // console.log(result.data[0]['count']);              
-                // console.log(deleteId);
+            success: function (result) {
+              let departmentName = result.data[0]['name'];
+            
+       
 
-                Swal.fire({
-                  title: 'Are you sure?',
-                  text: "You won't be able to revert this!",
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    $.ajax({
-                      type: "POST",
-                      url: "libs/php/deleteDepartmentByID.php",
-                      data: { id: deleteId },
-                      success: function (data) {
-                        // console.log(data);
-                        Swal.fire(
-                          'Deleted!',
-                          'This department has been deleted.',
-                          'success'
-                        )   
-                        getDepartments(1.5);   
-                      },
-                      error: function(jqXHR){
-                        console.log(jqXHR);
-                      }      
-                    });
-                  }
-                })
-              }
-      
-            },
+            $.ajax({
+              url:"libs/php/countEmployees.php",
+              type: "POST",
+              dataType: "JSON",
+              data:{
+                // deptId: $(this).closest('tr').data('department-id')
+                deptId: deleteId
+
+              },
+              success: function(result){
+                // console.log(result);
+                // console.log(result.data[0]['count']);
+                numEmployees = 0;
+                numEmployees += result.data[0]['count'];
+                // console.log(numEmployees);
+                if(numEmployees > 0) 
+                {
+                  // console.log("You can not delete this Department!");
+                  Toast.fire({
+                    icon: 'error',
+                    title: 'Department has dependencies',
+                    text: "You can't delete this department!"
+                  }) 
+                } 
+                else {
+                  // console.log("Go ahead Delete me!")
+                  // console.log(result.data[0]['count']);              
+                  // console.log(deleteId);
+
+                  Swal.fire({
+                    title: `Are you sure you want to delete department ${departmentName}?`,
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      $.ajax({
+                        type: "POST",
+                        url: "libs/php/deleteDepartmentByID.php",
+                        data: { id: deleteId },
+                        success: function (data) {
+                          // console.log(data);
+                          Swal.fire(
+                            'Deleted!',
+                            'This department has been deleted.',
+                            'success'
+                          )   
+                          getDepartments(1.5);   
+                        },
+                        error: function(jqXHR){
+                          console.log(jqXHR);
+                        }      
+                      });
+                    }
+                  })
+                }
+        
+              },
+              error:function(jqXHR){
+                console.log(jqXHR);
+              }            
+            });  
+          },
             error:function(jqXHR){
               console.log(jqXHR);
             }            
-          });                  
+          });                               
         });
 
         $('a[data-bs-target="#editDepartModal"]').click(function() {
 
           editId = $(this).closest('tr').data('department-id');
-          // console.log(editId);
+          console.log(editId);
   
           // Edit new employee modal
             $.ajax({
@@ -544,15 +596,17 @@ $(document).ready(function () {
 
   // Edit Department
   $("#editDepartmentSubmit").click(function(){
-    // console.log($('#departmentId').val());
-    // console.log($('#editDepartmentName').val());
-    // console.log($('#editDepartmentLocation').val());
+    console.log(editId);
+
+    console.log($('#departmentId').val());
+    console.log($('#editDepartmentName').val());
+    console.log($('#editDepartmentLocation').val());
     $.ajax({
       url:"libs/php/editDepartment.php",
       type: "POST",
       dataType: "JSON",
       data:{
-        id: $('#departmentId').val(),
+        id: editId,
         name: $('#editDepartmentName').val(),
         locationId: $('#editDepartmentLocation').val()
       },
@@ -562,7 +616,7 @@ $(document).ready(function () {
           icon: 'success',
           title: 'Successfully edited a department'
         })       
-   
+        // $('#editDepartmentName').val('');
         $("#departData").html('');
         getDepartments(1.5);
         myModalEditDept.toggle()
@@ -606,14 +660,16 @@ $(document).ready(function () {
 
   // Edit Location
   $("#editLocationSubmit").click(function(){
-    // console.log($('#editLocationId').val());
-    // console.log($('#editLocationName').val());
+    console.log(editId);
+
+    console.log($('#editLocationId').val());
+    console.log($('#editLocationName').val());
     $.ajax({
       url:"libs/php/editLocation.php",
       type: "POST",
       dataType: "JSON",
       data:{
-        id: $('#editLocationId').val(),
+        id: editId,
         name: $('#editLocationName').val()
       },
         success: function(result){
@@ -666,7 +722,7 @@ $(document).ready(function () {
               // console.log(result);
               searchData = 0;
               $.each(result.data, function (index, value) {
-                searchData += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
+                searchData += `<tr data-personnel-id='${value.id}'><td>${value.lastName}, ${value.firstName}</td><td class="tablet-hidden">${value.location}</td><td class="tablet-hidden">${value.email}</td><td  class="tablet-hidden">${value.department}</td>`;
                 // console.log(value.location);
                 searchData += "\
                           <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
@@ -744,7 +800,7 @@ advancedSearch()
               // console.log(result);
               searchData = 0;
               $.each(result.data, function (index, value) {
-                searchData += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
+                searchData += `<tr data-personnel-id='${value.id}'><td>${value.lastName}, ${value.firstName}</td><td class="tablet-hidden">${value.location}</td><td class="tablet-hidden">${value.email}</td><td  class="tablet-hidden">${value.department}</td>`;
                 // console.log(value.location);
                 searchData += "\
                           <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
@@ -788,7 +844,7 @@ advancedSearch()
               // console.log(result);
               searchData = 0;
               $.each(result.data, function (index, value) {
-                searchData += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
+                searchData += `<tr data-personnel-id='${value.id}'><td>${value.lastName}, ${value.firstName}</td><td class="tablet-hidden">${value.location}</td><td class="tablet-hidden">${value.email}</td><td  class="tablet-hidden">${value.department}</td>`;
                 // console.log(value.location);
                 searchData += "\
                           <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
@@ -832,7 +888,7 @@ advancedSearch()
               // console.log(result);
               searchData = 0;
               $.each(result.data, function (index, value) {
-                searchData += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
+                searchData += `<tr data-personnel-id='${value.id}'><td>${value.lastName}, ${value.firstName}</td><td class="tablet-hidden">${value.location}</td><td class="tablet-hidden">${value.email}</td><td  class="tablet-hidden">${value.department}</td>`;
                 // console.log(value.location);
                 searchData += "\
                           <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
@@ -876,7 +932,7 @@ advancedSearch()
               // console.log(result);
               searchData = 0;
               $.each(result.data, function (index, value) {
-                searchData += `<tr data-personnel-id='${value.id}'><td data-title='id'>${value.id}</td><td data-title='First Name'>${value.firstName}</td><td data-title=Last Name'>${value.lastName}</td><td data-title='Location'>${value.location}</td><td data-title='Email'>${value.email}</td><td data-title='Department'>${value.department}</td>`;
+                searchData += `<tr data-personnel-id='${value.id}'><td>${value.lastName}, ${value.firstName}</td><td class="tablet-hidden">${value.location}</td><td class="tablet-hidden">${value.email}</td><td  class="tablet-hidden">${value.department}</td>`;
                 // console.log(value.location);
                 searchData += "\
                           <td data-title='Edit/Delete'><a href='#editEmployeeModal' class='edit' data-bs-toggle='modal' data-bs-target='#editEmployeeModal'><i class='far fa-edit'\
@@ -923,40 +979,51 @@ advancedSearch()
   }
 
   function deleteTheEmployee(employeeId) {
-    // console.log('delete');
-    // console.log(employeeId);
-    // console.log($(this).closest('tr').data('personnel-id'));
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajax({
-            type: "POST",
-            url: "libs/php/deleteEmployee.php",
-            data: { 'id': employeeId },
-            success: function (data) {
-              console.log(data);
-              Swal.fire(
-                'Deleted!',
-                'The personnel file has been deleted.',
-                'success'
-              );
-              getAll(1.5);
-              //myModalDelete.toggle();   
-            },
-            error: function(jqXHR){
-              console.log(jqXHR);
-            }      
-          });
-        }
-      }); 
+    let name
+    let lastName;
+    $.ajax({
+      url: "libs/php/getPersonnelByID.php",
+      type: 'GET',
+      data: {
+        id: employeeId,
+      },
+      success: function (result) {
+        name = result.data.personnel[0]['firstName'];
+        lastName = result.data.personnel[0]['lastName'];
+        Swal.fire({
+          title: `Are you sure you want to remove ${name} ${lastName}?`,
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              type: "POST",
+              url: "libs/php/deleteEmployee.php",
+              data: { 'id': employeeId },
+              success: function (data) {
+                console.log(data);
+                Swal.fire(
+                  'Deleted!',
+                  'The personnel file has been deleted.',
+                  'success'
+                );
+                getAll(1.5);
+                //myModalDelete.toggle();   
+              },
+              error: function (jqXHR) {
+                console.log(jqXHR);
+              }
+            });
+          }
+        });
+      }
+    });
   };
+  
   function editTheEmployee(editId) {
     // console.log(editId);
     // console.log('Edit Employee');
@@ -1010,7 +1077,7 @@ const Toast = Swal.mixin({
   toast: true,
   position: 'center',
   showConfirmButton: false,
-  timer: 800,
+  timer: 2000,
   timerProgressBar: true,
   didOpen: (toast) => {
     toast.addEventListener('mouseenter', Swal.stopTimer)
