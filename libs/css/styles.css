@@ -1,7 +1,7 @@
 body {
   color: #566787;
   /* background: #f5f5f5; */
-  font-family: 'Rokkitt', serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 16px;
 }
 
@@ -45,6 +45,7 @@ body {
     margin: 0px -10px 10px;
     border-radius: 3px 3px 0 0;
     display: -webkit-box;
+    position: sticky;
 }
 .table-title h2 {
     margin: 5px 0 0;
@@ -86,11 +87,78 @@ body {
   align-items: flex-start;
 }
 
-th {
-  font-size: 1rem;
+.editDel {
+  /* font-size: 1rem; */
+  text-align: right;
 }
 
-table.table tr th, table.table tr td {
+.centerNum {
+  text-align: center;
+}
+
+.scroll {
+  color: #fff;
+  margin-top: 100px
+}
+
+#toTopBtn {
+  position: fixed;
+  bottom: 26px;
+  right: 39px;
+  z-index: 98;
+  padding: 21px;
+  background-color: rgba(48, 87, 172, 0.8)
+}
+
+.js .cd-top--fade-out {
+  opacity: .5
+}
+
+.js .cd-top--is-visible {
+  visibility: visible;
+  opacity: 1
+}
+
+.js .cd-top {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .3s, visibility .3s, background-color .3s
+}
+
+.cd-top {
+  position: fixed;
+  bottom: 20px;
+  bottom: var(--cd-back-to-top-margin);
+  right: 20px;
+  right: var(--cd-back-to-top-margin);
+  display: inline-block;
+  height: 40px;
+  height: var(--cd-back-to-top-size);
+  width: 40px;
+  width: var(--cd-back-to-top-size);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .05) !important;
+  background: url(https://res.cloudinary.com/dxfq3iotg/image/upload/v1571057658/cd-top-arrow.svg) no-repeat center 50%;
+  background-color: rgba(48, 98, 235, 0.8);
+  background-color: hsla(var(--cd-color-3-h), var(--cd-color-3-s), var(--cd-color-3-l), 0.8)
+}
+
+.searchField div {
+  padding-top: 1.9rem;
+}
+
+/* 
+#searchBarDiv {
+  position: fixed;
+}
+
+#spaceTable {
+  margin-top: 100px;
+} */
+
+/* .positionFixed {
+  position: fixed;
+} */
+/* table.table tr th, table.table tr td {
     border-color: #e9e9e9;
     padding: 12px 15px;
     vertical-align: middle;
@@ -100,18 +168,18 @@ table.table tr th:first-child {
 }
 table.table tr th:last-child {
     width: 100px;
-}
+} */
 table.table-striped tbody tr:nth-of-type(odd) {
     background-color: #fcfcfc;
 }
-table.table-striped.table-hover tbody tr:hover {
+/* table.table-striped.table-hover tbody tr:hover {
     background: #f5f5f5;
-}
-table.table th i {
+} */
+/* table.table th i {
     font-size: 1.5rem;
     margin: 0 5px;
     cursor: pointer;
-}	
+}	 */
 table.table td:last-child i {
     opacity: 0.9;
     font-size: 22px;
@@ -124,9 +192,9 @@ table.table td a {
     text-decoration: none;
     outline: none !important;
 }
-table.table td a:hover {
+/* table.table td a:hover {
     color: #2196F3;
-}
+} */
 table.table td a.edit {
     color: #FFC107;
 }
@@ -137,11 +205,7 @@ table.table td a.delete {
 table.table td i {
     font-size: 2.1rem;
 }
-table.table .avatar {
-    border-radius: 50%;
-    vertical-align: middle;
-    margin-right: 10px;
-}  
+
 
 /* Modal styles */
 .modal .modal-dialog {
@@ -176,65 +240,71 @@ table.table .avatar {
     font-weight: normal;
 }
 
+@media screen and (min-width: 401px) and (max-width: 1024px) {
+  .tablet-hidden {
+    display: none;
+  }
+}
+
 /* Hiding the ID column */
-th:nth-of-type(1) {
+/* th:nth-of-type(1) {
   display: none;
 }
 
 td:nth-of-type(1) {
   display: none;
-}
+} */
 
-@media only screen and (max-width: 800px) {
+/* @media only screen and (max-width: 800px) { */
 	
 	/* Force table to not be like tables anymore */
-	 table, 
+	 /* table, 
 	 thead, 
    tbody, 
 	 th, 
 	 td, 
 	 tr { 
 		display: block; 
-	}
+	} */
  
 	/* Hide table headers (but not display: none;, for accessibility) */
-   thead tr { 
+   /* thead tr { 
 		position: absolute;
 		top: -9999px;
 		left: -9999px;
-	}
+	} */
  
-	 tr { 
+	 /* tr { 
      margin: 0 0 1rem 0;
      border: 1px solid #ccc; 
-    }
+    } */
  
-	 td { 
+	 /* td {  */
 		/* Behave  like a "row" */
-		border: none;
+		/* border: none;
 		border-bottom: 1px solid #eee; 
 		position: relative;
 		padding-left: 50%; 
 		white-space: normal;
 		text-align: right;
-	}
+	} */
  
-	 td:before { 
+	 /* td:before {  */
 		/* Now like a table header */
-		position: absolute;
+		/* position: absolute; */
 		/* Top/left values mimic padding */
-		top: 27%;
+		/* top: 27%;
 		left: 6px;
 		width: 45%; 
 		padding-right: 10px; 
 		white-space: nowrap;
 		text-align:left;
-		font-weight: bold;
-	}
+		font-weight: bold; */
+	/* } */
  
 	/* Label the data */
 	
-  td:before { 
+  /* td:before { 
     content: attr(data-title); 
   }
 
@@ -249,4 +319,4 @@ td:nth-of-type(1) {
   .table-title .btn-group {
     float: right !important;
   }
-}
+} */
